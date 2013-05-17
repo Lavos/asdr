@@ -1,4 +1,4 @@
-LUCID.provide('_', function(){
+LUCID.provide('_', [], function(){
 	// Underscore.js 1.4.4
 	// ===================
 

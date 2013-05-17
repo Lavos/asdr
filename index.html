@@ -11,5 +11,15 @@
 
 <body>
 	<script type="text/javascript" src="test.js"></script>
+
+	<script>
+		LUCID.use(['mod1', 'zmod', '$'], function(mod1, zmod){
+			console.dir(arguments);
+		});
+
+		LUCID.use(['mod1', 'zmod', '$'], function(mod1, zmod){
+			console.dir(arguments);
+		});
+	</script>
 </body>
 </html>

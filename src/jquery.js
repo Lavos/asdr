@@ -1,4 +1,4 @@
-LUCID.provide('$', function(){
+LUCID.provide('$', [], function(){
 	/*!
 	 * jQuery JavaScript Library v1.9.1
 	 * http://jquery.com/

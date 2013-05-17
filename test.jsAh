@@ -4,7 +4,7 @@
 	var posthash = {};
 
 	function store (point, singleton, depends) {
-		if (posthash.hasOwnProperty(point)) {
+		if (post.hasOwnProperty(point)) {
 			return;
 		};
 
@@ -32,9 +32,7 @@
 	LUCID.use = function use (depends, singleton) {
 		var counter = 0, limit = depends.length, args = [];
 		while (counter < limit) {
-			if (!posthash.hasOwnProperty(depends[counter])) { 
-				store(depends[counter], prehash[depends[counter]].singleton, prehash[depends[counter]].depends);
-			};
+			store(depends[counter], posthash[depends[counter]].singleton, posthash[depends[counter]].depends);
 
 			args.push(posthash[depends[counter]]);
 			counter++;								
@@ -43,8 +41,6 @@
 		singleton.apply(LUCID, args);
 	};
 
-	LUCID.prehash = prehash;
-	LUCID.posthash = posthash;
 	
 }).call(this['LUCID'] = this['LUCID'] || {});
 LUCID.provide('__', [], function(){
@@ -10818,7 +10814,6 @@ LUCID.provide('$', [], function(){
 	})( window );
 });
 LUCID.provide('mod1', ['$', 'zmod'], function(jQuery, zmod){
-	console.log('this is mod1 and I am so happy');
 	console.dir(this);
 	console.dir(jQuery);
 	console.dir(zmod);
@@ -12056,6 +12051,5 @@ LUCID.provide('_', [], function(){
 	}).call(this);
 });
 LUCID.provide('zmod', [], function(){
-	console.log('this is zmod and and I am sad.');
 	return { xyz: 123 };
 });
