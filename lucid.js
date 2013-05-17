@@ -15,7 +15,6 @@
 			};
 
 			args.push(posthash[depends[counter]]);
-
 			counter++;
 		};
 
@@ -32,12 +31,12 @@
 	LUCID.use = function use (depends, singleton) {
 		var counter = 0, limit = depends.length, args = [];
 		while (counter < limit) {
-			if (!posthash.hasOwnProperty(depends[counter])) { 
+			if (!posthash.hasOwnProperty(depends[counter])) {
 				store(depends[counter], prehash[depends[counter]].singleton, prehash[depends[counter]].depends);
 			};
 
 			args.push(posthash[depends[counter]]);
-			counter++;								
+			counter++;
 		};
 
 		singleton.apply(LUCID, args);
@@ -45,5 +44,5 @@
 
 	LUCID.prehash = prehash;
 	LUCID.posthash = posthash;
-	
+
 }).call(this['LUCID'] = this['LUCID'] || {});
