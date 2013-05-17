@@ -3,23 +3,25 @@
 	var prehash = {};
 	var posthash = {};
 
-	function store (point, singleton, depends) {
+	function store (point) {
+		if (!prehash.hasOwnProperty(point)) {
+			throw 'This resource is not known to me: ' + point;
+		};
+
 		if (posthash.hasOwnProperty(point)) {
 			return;
 		};
 
-		var counter = 0, limit = depends.length, args = [];
+		var dependancy = prehash[point];
+
+		var counter = 0, limit = dependancy.depends.length, args = [];
 		while (counter < limit) {
-			if (!posthash.hasOwnProperty(depends[counter])) {
-				store(depends[counter], prehash[depends[counter]].singleton, prehash[depends[counter]].depends);
-			};
-
-			args.push(posthash[depends[counter]]);
-
+			store(dependancy.depends[counter]);
+			args.push(posthash[dependancy.depends[counter]]);
 			counter++;
 		};
 
-		posthash[point] = singleton.apply(LUCID, args);
+		posthash[point] = dependancy.singleton.apply(LUCID, args);
 	};
 
 	LUCID.provide = function provide (point, depends, singleton) {
@@ -32,12 +34,9 @@
 	LUCID.use = function use (depends, singleton) {
 		var counter = 0, limit = depends.length, args = [];
 		while (counter < limit) {
-			if (!posthash.hasOwnProperty(depends[counter])) { 
-				store(depends[counter], prehash[depends[counter]].singleton, prehash[depends[counter]].depends);
-			};
-
+			store(depends[counter]);
 			args.push(posthash[depends[counter]]);
-			counter++;								
+			counter++;
 		};
 
 		singleton.apply(LUCID, args);
@@ -45,9 +44,9 @@
 
 	LUCID.prehash = prehash;
 	LUCID.posthash = posthash;
-	
+
 }).call(this['LUCID'] = this['LUCID'] || {});
-LUCID.provide('__', [], function(){
+LUCID.provide('doubleunderscore', [], function(){
 /*
 *        doubleunderscore
 *        https://github.com/Lavos/doubleunderscore
@@ -1217,7 +1216,7 @@ LUCID.provide('__', [], function(){
 		return __;
 	});
 });
-LUCID.provide('$', [], function(){
+LUCID.provide('jquery', [], function(){
 	/*!
 	 * jQuery JavaScript Library v1.9.1
 	 * http://jquery.com/
@@ -10817,14 +10816,14 @@ LUCID.provide('$', [], function(){
 
 	})( window );
 });
-LUCID.provide('mod1', ['$', 'zmod'], function(jQuery, zmod){
+LUCID.provide('mod1', ['jquery', 'zmod'], function(jQuery, zmod){
 	console.log('this is mod1 and I am so happy');
 	console.dir(this);
 	console.dir(jQuery);
 	console.dir(zmod);
 	return 12345;
 });
-LUCID.provide('_', [], function(){
+LUCID.provide('underscore', [], function(){
 	// Underscore.js 1.4.4
 	// ===================
 

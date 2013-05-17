@@ -1,4 +1,4 @@
-LUCID.provide('__', [], function(){
+LUCID.provide('doubleunderscore', [], function(){
 /*
 *        doubleunderscore
 *        https://github.com/Lavos/doubleunderscore

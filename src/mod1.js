@@ -1,4 +1,4 @@
-LUCID.provide('mod1', ['$', 'zmod'], function(jQuery, zmod){
+LUCID.provide('mod1', ['jquery', 'zmod'], function(jQuery, zmod){
 	console.log('this is mod1 and I am so happy');
 	console.dir(this);
 	console.dir(jQuery);

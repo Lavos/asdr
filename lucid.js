@@ -3,22 +3,25 @@
 	var prehash = {};
 	var posthash = {};
 
-	function store (point, singleton, depends) {
+	function store (point) {
+		if (!prehash.hasOwnProperty(point)) {
+			throw 'This resource is not known to me: ' + point;
+		};
+
 		if (posthash.hasOwnProperty(point)) {
 			return;
 		};
 
-		var counter = 0, limit = depends.length, args = [];
-		while (counter < limit) {
-			if (!posthash.hasOwnProperty(depends[counter])) {
-				store(depends[counter], prehash[depends[counter]].singleton, prehash[depends[counter]].depends);
-			};
+		var dependancy = prehash[point];
 
-			args.push(posthash[depends[counter]]);
+		var counter = 0, limit = dependancy.depends.length, args = [];
+		while (counter < limit) {
+			store(dependancy.depends[counter]);
+			args.push(posthash[dependancy.depends[counter]]);
 			counter++;
 		};
 
-		posthash[point] = singleton.apply(LUCID, args);
+		posthash[point] = dependancy.singleton.apply(LUCID, args);
 	};
 
 	LUCID.provide = function provide (point, depends, singleton) {
@@ -31,10 +34,7 @@
 	LUCID.use = function use (depends, singleton) {
 		var counter = 0, limit = depends.length, args = [];
 		while (counter < limit) {
-			if (!posthash.hasOwnProperty(depends[counter])) {
-				store(depends[counter], prehash[depends[counter]].singleton, prehash[depends[counter]].depends);
-			};
-
+			store(depends[counter]);
 			args.push(posthash[depends[counter]]);
 			counter++;
 		};
