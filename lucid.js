@@ -40,5 +40,4 @@
 
 	LUCID.prehash = prehash;
 	LUCID.posthash = posthash;
-
 }).call(this['LUCID'] = this['LUCID'] || {});

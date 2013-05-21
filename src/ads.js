@@ -5,7 +5,7 @@
 //
 // Mobile Ads - How do we decide when to call mobile vs desktop (browser width)
 // Mobile Ads - How / where do we define the slots?
-// On/Fire - Event listeners - Ad these
+// On/Fire - Event listeners - Add these
 // adSlot.setTargeting("tile", tile); // Please verify that this is being used.
 // How do we pass in "options: cat=Fashion" categories? - setTargeting ?
 // Companion Ads - I think this is already taken care of in DFP based off position
@@ -17,8 +17,7 @@
 //
 //
 //
-var Ads = (function() {
-
+LUCID.provide('AdsX', ['jquery'], function($){
 	// Configuration
 	var networkCode = 4700;
 	var zone; // homepage, photo, royals, etc
@@ -47,7 +46,7 @@ var Ads = (function() {
 		var useSSL = "https:" == document.location.protocol;
 		var js_file = ( window.innerWidth < 728 ) ? "gpt_mobile.js" : "gpt.js";
 		gads.src = (useSSL ? "https:" : "http:") + "//www.googletagservices.com/tag/js/" + js_file;
-		var node =document.getElementsByTagName("script")[0];
+		var node = document.getElementsByTagName("script")[0];
 		node.parentNode.insertBefore(gads, node);
 
 		// run when gpt is loaded
@@ -131,18 +130,24 @@ var Ads = (function() {
 		// How do I do mobile here? Should I have 2 function one for desktop and one for mobile?
 		//
 		defineAndConfigureAds: function () {
-			$(".ad_desktop").each(function() {
+			$(".ad_desktop").each(function(index) {
+				var $this = $(this);
+
 				// Make sure this slot isn't already loaded.
-				if ( typeof $(this).data("loaded") === "undefined" ) {
+				if ( typeof $this.data("loaded") === "undefined" ) {
 					var id = this.id;
+
 					if ( !id || 0 === id.length ) {
-						id = this.id = "ad_" + $(this).index();
-					}
-					var sizes = $(this).data("sizes");
-					var zone = $(this).data("zone");
-					var position = $(this).data("position");
-					var tile = $(this).data("tile");
-					$(this).data("loaded", "true");
+						id = this.id = ("ad_n" + index);
+					};
+
+					// do we want to put resonable defaults in here, or abort if malformed?
+					var sizes = $this.data("sizes");
+					var zone = $this.data("zone");
+					var position = $this.data("position");
+					var tile = $this.data("tile");
+
+					$this.data("loaded", "true");
 					Ads.generateAdCall(id, sizes, position, tile);
 				}
 			});
@@ -166,5 +171,4 @@ var Ads = (function() {
 		}
 
 	};
-
-})();
+});
