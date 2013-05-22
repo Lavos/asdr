@@ -7,6 +7,21 @@
 	<style type="text/css">
 
 	</style>
+
+	<script type="text/javascript">
+		(function(){
+			window['LUCID'] = [];
+			var ns = document.createElement('script'), s = document.getElementsByTagName('script')[0];
+			ns.async = true; ns.type = 'text/javascript'; ns.src = 'test.js'; s.parentNode.insertBefore(ns, s);
+		})();
+
+		LUCID.push({
+			use: ['jquery', 'ads'],
+			do: function(){
+				console.dir(arguments);
+			}
+		});
+	</script>
 </head>
 
 <body>
@@ -15,9 +30,10 @@
 		<button id="create">Insert New Ad</button>
 	</div><!-- /.actions -->
 
-	<script type="text/javascript" src="test.js"></script>
-
 	<script type="text/javascript">
+	</script>
+
+	<script type="text/javascriptx">
 		console.dir(LUCID);
 
 		LUCID.use(['jquery', 'ads'], function($, Ads){

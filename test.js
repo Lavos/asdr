@@ -1,5 +1,13 @@
-(function(){
-	var LUCID = this, prehash = {}, posthash = {};
+(function(root, factory){
+	var LUCID_CONSTRUCTOR = factory();
+
+	if (root['LUCID'] instanceof LUCID_CONSTRUCTOR === false) {
+		var list = root['LUCID'];
+		root['LUCID'] = new LUCID_CONSTRUCTOR();
+		root['LUCID'].list = list;
+	};
+})(window, function(){
+	var prehash = {}, posthash = {};
 
 	function store (point) {
 		if (!prehash.hasOwnProperty(point)) {
@@ -27,20 +35,26 @@
 		return args;
 	};
 
-	LUCID.provide = function provide (point, depends, singleton) {
+	var LUCID = function LUCID () {
+		this.prehash = prehash;
+		this.posthash = posthash;
+	};
+
+	LUCID.prototype.provide = function provide (point, depends, singleton) {
+		console.log('provide ' + point);
+
 		prehash[point] = {
 			singleton: singleton,
 			depends: depends
 		};
 	};
 
-	LUCID.use = function use (depends, singleton) {
-		singleton.apply(LUCID, process_dependencies(depends));
+	LUCID.prototype.push = function push (work_obj) {
+		work_obj['do'].apply(this, process_dependencies(work_obj['use']));
 	};
 
-	LUCID.prehash = prehash;
-	LUCID.posthash = posthash;
-}).call(this['LUCID'] = this['LUCID'] || {});
+	return LUCID;
+});
 //
 // GPT Ad
 //
@@ -12385,3 +12399,10 @@ LUCID.provide('zmod', [], function(){
 	console.log('this is zmod and and I am sad.');
 	return { xyz: 123 };
 });
+(function(LUCID){
+	var counter = 0, limit = LUCID.list.length;
+	while (counter < limit) {
+		LUCID.push(LUCID.list[counter]);
+		counter++;
+	};
+})(window['LUCID']);
