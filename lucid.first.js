@@ -18,28 +18,26 @@
 			return;
 		};
 
-		var dependency = prehash[point];
-		posthash[point] = dependency.singleton.apply(LUCID, process_dependencies(dependency.depends));
+		posthash[point] = dependency.singleton.apply(LUCID, process_dependencies(prehash[point].depends));
 	};
 
 	function process_dependencies (dependencies) {
-		var args = [];
-
 		var counter = 0, limit = dependencies.length, args = [];
 		while (counter < limit) {
-			store(dependencies[counter]);
-			args.push(posthash[dependencies[counter]]);
+			var current = dependencies[counter];
+			store(current);
+			args.push(posthash[current]);
 			counter++;
 		};
 
 		return args;
 	};
 
-	var LUCID = function LUCID () { };
+	var LUCID = function LUCID (){
+		this.start_time = new Date();
+	};
 
 	LUCID.prototype.provide = function provide (point, depends, singleton) {
-		console.log('provide ' + point);
-
 		prehash[point] = {
 			singleton: singleton,
 			depends: depends
@@ -47,7 +45,10 @@
 	};
 
 	LUCID.prototype.push = function push (work_obj) {
-		work_obj['do'].apply(this, process_dependencies(work_obj['use']));
+		work_obj['do'] = work_obj['do'] || function(){};
+		work_obj['use'] = work_obj['use'] || [];
+
+		work_obj['do'].apply(this, process_dependencies(work_obj['use']));i
 	};
 
 	return LUCID;

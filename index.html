@@ -16,6 +16,13 @@
 		})();
 
 		LUCID.push({
+			use: [],
+			do: function(){
+				console.dir(LUCID);
+			}
+		});
+
+		LUCID.push({
 			use: ['jquery', 'ads'],
 			do: function(){
 				console.dir(arguments);
@@ -34,8 +41,8 @@
 	</script>
 
 	<script type="text/javascriptx">
-		console.dir(LUCID);
 
+		console.dir(LUCID);
 		LUCID.use(['jquery', 'ads'], function($, Ads){
 			Ads.site_code = 'buz.celebuzz';
 			Ads.zone = 'homepage';

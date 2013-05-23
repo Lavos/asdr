@@ -35,9 +35,8 @@
 		return args;
 	};
 
-	var LUCID = function LUCID () {
-		this.prehash = prehash;
-		this.posthash = posthash;
+	var LUCID = function LUCID (){
+		this.start_time = new Date();
 	};
 
 	LUCID.prototype.provide = function provide (point, depends, singleton) {
@@ -12405,4 +12404,7 @@ LUCID.provide('zmod', [], function(){
 		LUCID.push(LUCID.list[counter]);
 		counter++;
 	};
+
+	LUCID.end_time = new Date();
+	LUCID.eval_time = LUCID.end_time - LUCID.start_time;
 })(window['LUCID']);
