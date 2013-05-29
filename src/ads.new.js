@@ -1,6 +1,5 @@
 LUCID.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($, _, __){
 	var window_width = __.dims().x;
-	console.log(window_width);
 
 	function insertGPT (callback) {
 		// add async GPT javascript to page
@@ -11,7 +10,7 @@ LUCID.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($, _
 		var useSSL = 'https:' == document.location.protocol;
 		var js_file = window_width < 728 ? 'gpt_mobile.js' : 'gpt.js';
 		gpt_script.src = (useSSL ? 'https:' : 'http:') + '//www.googletagservices.com/tag/js/' + js_file;
-		gpt_script.src = '//www.googletagservices.com/tag/js/gpt.js';
+		// gpt_script.src = '//www.googletagservices.com/tag/js/gpt.js';
 
 		__.onLoad(gpt_script, function(){
 			googletag.pubads().collapseEmptyDivs();
@@ -59,8 +58,8 @@ LUCID.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($, _
 			});
 
 			adSlot.addService(googletag.pubads());
-			adSlot.setTargeting("pos", self.options.position);
-			adSlot.setTargeting("tile", self.options.tile); // Please verify that this is being used.
+			adSlot.setTargeting('pos', self.options.position);
+			adSlot.setTargeting('tile', self.options.tile); // Please verify that this is being used.
 			googletag.display(self.id); // requests for this ad
 
 			self.gpt_slot = adSlot;

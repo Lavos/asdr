@@ -14,20 +14,6 @@
 			var ns = document.createElement('script'), s = document.getElementsByTagName('script')[0];
 			ns.async = true; ns.type = 'text/javascript'; ns.src = 'test.js'; s.parentNode.insertBefore(ns, s);
 		})();
-
-		LUCID.push({
-			use: [],
-			do: function(){
-				console.dir(LUCID);
-			}
-		});
-
-		LUCID.push({
-			use: ['jquery', 'ads'],
-			do: function(){
-				console.dir(arguments);
-			}
-		});
 	</script>
 </head>
 
@@ -38,43 +24,42 @@
 	</div><!-- /.actions -->
 
 	<script type="text/javascript">
-	</script>
-
-	<script type="text/javascriptx">
 
 		console.dir(LUCID);
-		LUCID.use(['jquery', 'ads'], function($, Ads){
-			Ads.site_code = 'buz.celebuzz';
-			Ads.zone = 'homepage';
+		LUCID.push({
+			use: ['jquery', 'ads', 'doubleunderscore'],
+			do: function($, Ads, __){
+				Ads.site_code = 'buz.celebuzz';
+				Ads.zone = 'homepage';
 
-			var new_div = document.createElement('div');
-			$('body').append(new_div);
-
-			Ads.createAd({
-				sizes: [[728,90]],
-				position: '728a',
-				tile: 3,
-				element: new_div
-			});
-
-			$('#refresh').on('click', function(e){
-				Ads.refresh();
-			});
-
-			/* $('#create').on('click', function(e){
-				e.preventDefault(); */
-
-				var new_div2 = document.createElement('div');
-				$('body').append(new_div2);
+				var new_div = document.createElement('div');
+				$('body').append(new_div);
 
 				Ads.createAd({
-					sizes: [[300,600]],
-					position: '300a',
-					tile: 1,
-					element: new_div2	
+					sizes: [[728,90]],
+					position: '728a',
+					tile: 3,
+					element: new_div
 				});
 
-			// });
+				$('#refresh').on('click', function(e){
+					Ads.refresh();
+				});
+
+				/* $('#create').on('click', function(e){
+					e.preventDefault(); */
+
+					var new_div2 = document.createElement('div');
+					$('body').append(new_div2);
+
+					Ads.createAd({
+						sizes: [[300,600], [300,250]],
+						position: '300a',
+						tile: 1,
+						element: new_div2	
+					});
+				/* }); */
+			}
 		});
 	</script>
 </body>

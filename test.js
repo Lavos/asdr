@@ -18,17 +18,15 @@
 			return;
 		};
 
-		var dependency = prehash[point];
-		posthash[point] = dependency.singleton.apply(LUCID, process_dependencies(dependency.depends));
+		posthash[point] = prehash[point].singleton.apply(LUCID, process_dependencies(prehash[point].depends));
 	};
 
 	function process_dependencies (dependencies) {
-		var args = [];
-
 		var counter = 0, limit = dependencies.length, args = [];
 		while (counter < limit) {
-			store(dependencies[counter]);
-			args.push(posthash[dependencies[counter]]);
+			var current = dependencies[counter];
+			store(current);
+			args.push(posthash[current]);
 			counter++;
 		};
 
@@ -40,8 +38,6 @@
 	};
 
 	LUCID.prototype.provide = function provide (point, depends, singleton) {
-		console.log('provide ' + point);
-
 		prehash[point] = {
 			singleton: singleton,
 			depends: depends
@@ -49,6 +45,9 @@
 	};
 
 	LUCID.prototype.push = function push (work_obj) {
+		work_obj['do'] = work_obj['do'] || function(){};
+		work_obj['use'] = work_obj['use'] || [];
+
 		work_obj['do'].apply(this, process_dependencies(work_obj['use']));
 	};
 
@@ -230,7 +229,6 @@ LUCID.provide('AdsX', ['jquery'], function($){
 });
 LUCID.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($, _, __){
 	var window_width = __.dims().x;
-	console.log(window_width);
 
 	function insertGPT (callback) {
 		// add async GPT javascript to page
@@ -241,7 +239,7 @@ LUCID.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($, _
 		var useSSL = 'https:' == document.location.protocol;
 		var js_file = window_width < 728 ? 'gpt_mobile.js' : 'gpt.js';
 		gpt_script.src = (useSSL ? 'https:' : 'http:') + '//www.googletagservices.com/tag/js/' + js_file;
-		gpt_script.src = '//www.googletagservices.com/tag/js/gpt.js';
+		// gpt_script.src = '//www.googletagservices.com/tag/js/gpt.js';
 
 		__.onLoad(gpt_script, function(){
 			googletag.pubads().collapseEmptyDivs();
@@ -289,8 +287,8 @@ LUCID.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($, _
 			});
 
 			adSlot.addService(googletag.pubads());
-			adSlot.setTargeting("pos", self.options.position);
-			adSlot.setTargeting("tile", self.options.tile); // Please verify that this is being used.
+			adSlot.setTargeting('pos', self.options.position);
+			adSlot.setTargeting('tile', self.options.tile); // Please verify that this is being used.
 			googletag.display(self.id); // requests for this ad
 
 			self.gpt_slot = adSlot;

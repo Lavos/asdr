@@ -18,7 +18,7 @@
 			return;
 		};
 
-		posthash[point] = dependency.singleton.apply(LUCID, process_dependencies(prehash[point].depends));
+		posthash[point] = prehash[point].singleton.apply(LUCID, process_dependencies(prehash[point].depends));
 	};
 
 	function process_dependencies (dependencies) {
@@ -48,7 +48,7 @@
 		work_obj['do'] = work_obj['do'] || function(){};
 		work_obj['use'] = work_obj['use'] || [];
 
-		work_obj['do'].apply(this, process_dependencies(work_obj['use']));i
+		work_obj['do'].apply(this, process_dependencies(work_obj['use']));
 	};
 
 	return LUCID;
