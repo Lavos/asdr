@@ -17,7 +17,7 @@
 //
 //
 //
-LUCID.provide('AdsX', ['jquery'], function($){
+CLARITY.provide('AdsX', ['jquery'], function($){
 	// Configuration
 	var networkCode = 4700;
 	var zone; // homepage, photo, royals, etc

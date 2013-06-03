@@ -10,7 +10,7 @@
  *       Adapted code licensed by their respective authors.
  */
 
-LUCID.provide('doubleunderscore', [], function(){
+CLARITY.provide('doubleunderscore', [], function(){
 	return (function(root, factory){
 		if (typeof root['define'] === 'function' && define.amd) {
 			define(function(){ return factory(); });

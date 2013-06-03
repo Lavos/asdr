@@ -1,4 +1,4 @@
-LUCID.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($, _, __){
+CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($, _, __){
 	var window_width = __.dims().x;
 
 	function insertGPT (callback) {
@@ -15,7 +15,7 @@ LUCID.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($, _
 		__.onLoad(gpt_script, function(){
 			googletag.pubads().collapseEmptyDivs();
 			googletag.pubads().enableAsyncRendering();
-			googletag.pubads().enableSingleRequest();
+			// googletag.pubads().enableSingleRequest();
 			googletag.enableServices();
 			callback();
 		});

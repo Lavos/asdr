@@ -10,7 +10,7 @@
 
 	<script type="text/javascript">
 		(function(){
-			window['LUCID'] = [];
+			window['CLARITY'] = [];
 			var ns = document.createElement('script'), s = document.getElementsByTagName('script')[0];
 			ns.async = true; ns.type = 'text/javascript'; ns.src = 'test.js'; s.parentNode.insertBefore(ns, s);
 		})();
@@ -25,8 +25,8 @@
 
 	<script type="text/javascript">
 
-		console.dir(LUCID);
-		LUCID.push({
+		console.dir(CLARITY);
+		CLARITY.push({
 			use: ['jquery', 'ads', 'doubleunderscore'],
 			do: function($, Ads, __){
 				Ads.site_code = 'buz.celebuzz';
@@ -42,6 +42,16 @@
 					element: new_div
 				});
 
+				var new_div2 = document.createElement('div');
+				$('body').append(new_div2);
+
+				Ads.createAd({
+					sizes: [[300,600], [300,250]],
+					position: '300a',
+					tile: 1,
+					element: new_div2	
+				});
+
 				$('#refresh').on('click', function(e){
 					Ads.refresh();
 				});
@@ -54,7 +64,7 @@
 
 					Ads.createAd({
 						sizes: [[300,600], [300,250]],
-						position: '300a',
+						position: '300b',
 						tile: 1,
 						element: new_div2	
 					});

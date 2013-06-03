@@ -1,24 +1,24 @@
 (function(root, factory){
-	var LUCID_CONSTRUCTOR = factory();
+	var CONSTRUCTOR = factory();
 
-	if (root['LUCID'] instanceof LUCID_CONSTRUCTOR === false) {
-		var list = root['LUCID'];
-		root['LUCID'] = new LUCID_CONSTRUCTOR();
-		root['LUCID'].list = list;
+	if (root['CLARITY'] instanceof CONSTRUCTOR === false) {
+		var list = root['CLARITY'];
+		root['CLARITY'] = new CONSTRUCTOR();
+		root['CLARITY'].list = list;
 	};
 })(window, function(){
 	var prehash = {}, posthash = {};
 
 	function store (point) {
 		if (!prehash.hasOwnProperty(point)) {
-			throw '[LUCID] Unknown reference identifier: ' + point;
+			throw '[CLARITY] Unknown reference identifier: ' + point;
 		};
 
 		if (posthash.hasOwnProperty(point)) {
 			return;
 		};
 
-		posthash[point] = prehash[point].singleton.apply(LUCID, process_dependencies(prehash[point].depends));
+		posthash[point] = prehash[point].singleton.apply(CLARITY, process_dependencies(prehash[point].depends));
 	};
 
 	function process_dependencies (dependencies) {
@@ -33,23 +33,23 @@
 		return args;
 	};
 
-	var LUCID = function LUCID (){
+	var CLARITY = function CLARITY (){
 		this.start_time = new Date();
 	};
 
-	LUCID.prototype.provide = function provide (point, depends, singleton) {
+	CLARITY.prototype.provide = function provide (point, depends, singleton) {
 		prehash[point] = {
 			singleton: singleton,
 			depends: depends
 		};
 	};
 
-	LUCID.prototype.push = function push (work_obj) {
+	CLARITY.prototype.push = function push (work_obj) {
 		work_obj['do'] = work_obj['do'] || function(){};
 		work_obj['use'] = work_obj['use'] || [];
 
 		work_obj['do'].apply(this, process_dependencies(work_obj['use']));
 	};
 
-	return LUCID;
+	return CLARITY;
 });

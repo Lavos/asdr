@@ -1,4 +1,4 @@
-LUCID.provide('underscore', [], function(){
+CLARITY.provide('underscore', [], function(){
 	// Underscore.js 1.4.4
 	// ===================
 
