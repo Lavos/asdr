@@ -301,7 +301,7 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 	Ad.prototype.refresh = function refresh () {
 		var self = this;
 
-		googletag.pubads().refresh([self.ad_slot]);
+		googletag.pubads().refresh([self.gpt_slot]);
 		self.fire('refresh');
 	};
 
@@ -367,6 +367,8 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 	AdManager.prototype.refresh = function refresh (id) {
 		var self = this;
 
+		console.log('sdas');
+		console.log(self.ads_by_id.hasOwnProperty(id));
 		console.log('refresh!');
 
 		if (typeof id === 'undefined') {
@@ -383,6 +385,8 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 			_.invoke(affected_ads, 'fire', 'refresh');
 			self.fire('refresh', affected_ads);
 		} else if (self.ads_by_id.hasOwnProperty(id)) {
+			console.log('here!');
+
 			self.ads_by_id[id].refresh();
 			self.fire('refresh', [self.ads_by_id[id]]);
 		};

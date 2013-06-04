@@ -19,7 +19,8 @@
 
 <body>
 	<div class="actions">
-		<button id="refresh">Refresh Ads</button>
+		<button id="refresh">Refresh All Ads</button>
+		<button class="refresh_one" data-ad-id="ad_728a">Refresh 728a</button>
 		<button id="create">Insert New Ad</button>
 	</div><!-- /.actions -->
 
@@ -77,6 +78,11 @@
 				$('#refresh').on('click', function(e){
 					Ads.refresh();
 				});
+
+				$('.refresh_one').on('click', function(e){
+					console.log($(this).data('ad-id'));
+					Ads.refresh($(this).data('ad-id'));
+				});				
 			}
 		});
 	</script>
