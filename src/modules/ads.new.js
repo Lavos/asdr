@@ -1,5 +1,6 @@
 CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($, _, __){
-	var window_width = __.dims().x;
+	var WINDOW_WIDTH = __.dims().x;
+	var IS_MOBILE = WINDOW_WIDTH < 728;
 
 	function insertGPT (callback) {
 		// add async GPT javascript to page
@@ -8,7 +9,7 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 		gpt_script.type = 'text/javascript';
 
 		var useSSL = 'https:' == document.location.protocol;
-		var js_file = window_width < 728 ? 'gpt_mobile.js' : 'gpt.js';
+		var js_file = IS_MOBILE ? 'gpt_mobile.js' : 'gpt.js';
 		gpt_script.src = (useSSL ? 'https:' : 'http:') + '//www.googletagservices.com/tag/js/' + js_file;
 		// gpt_script.src = '//www.googletagservices.com/tag/js/gpt.js';
 
@@ -111,6 +112,12 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 				element: this
 			});
 		});
+	};
+
+	AdManager.prototype.autoPopulate = function () {
+		var self = this;
+
+		self.populate(IS_MOBILE ? '.ad_mobile' : '.ad_desktop');	
 	};
 
 	AdManager.prototype.createAd = function createAd (params) {

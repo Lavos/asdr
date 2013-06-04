@@ -26,7 +26,8 @@
 	<fieldset class="static_ads">
 		<legend>STATIC</legend>
 
-		<div class="ad_desktop" id="ad_728a" data-sizes="[[728,90]]" data-position="728a" data-tile="2"></div>
+		<div class="OMGAD" id="ad_728a" data-sizes="[[728,90]]" data-position="728a" data-tile="2"></div>
+		<div class="ad_desktop" id="ad_728b" data-sizes="[[728,90]]" data-position="728b" data-tile="2"></div>
 	</fieldset><!-- /.static_ads -->
 
 	<fieldset class="dynamic_ads">
@@ -43,8 +44,9 @@
 				Ads.zone = 'homepage';
 
 				// static ads
-				Ads.populate('.ad_desktop');
-
+				Ads.populate('.OMGAD');
+				Ads.autoPopulate();
+	
 				// dynamic ads, immediately
 				var new_div = document.createElement('div');
 				$('.dynamic_ads').append(new_div);
