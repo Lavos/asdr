@@ -110,8 +110,6 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 				continue;
 			};
 
-			console.log(current_obj);
-
 			var keywords = current_obj.keywords.split(',');
 		
 			// make the keypair map of values
