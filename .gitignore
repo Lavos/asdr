@@ -1,3 +1,4 @@
 bin/*.js
 bin/modules/*.js
 test.min.js
+kris.buzzmedia.private.key

@@ -4,6 +4,8 @@
 	<meta charset="utf-8"/>
 	<title>library</title>
 
+	<script type="text/javascript" src="http://cdn.extensions.buzznet.com/topscript.js.php?siteToken=AP"></script>
+
 	<style type="text/css">
 
 	</style>
@@ -37,12 +39,12 @@
 
 	<script type="text/javascript">
 
-		console.dir(CLARITY);
 		CLARITY.push({
 			use: ['jquery', 'ads'],
-			do: function($, Ads){
-				Ads.site_code = 'buz.celebuzz';
-				Ads.zone = 'homepage';
+			run: function($, Ads){
+				Ads.site_code = 'buz.apunk';
+				Ads.zone = 'forums';
+				Ads.keywords = window.extensionsKeywords;
 
 				// static ads
 				Ads.populate('.OMGAD');
@@ -80,7 +82,6 @@
 				});
 
 				$('.refresh_one').on('click', function(e){
-					console.log($(this).data('ad-id'));
 					Ads.refresh($(this).data('ad-id'));
 				});				
 			}

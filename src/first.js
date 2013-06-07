@@ -11,7 +11,7 @@
 
 	function store (point) {
 		if (!prehash.hasOwnProperty(point)) {
-			throw '[CLARITY] Unknown reference identifier: ' + point;
+			throw('[CLARITY] Unknown reference identifier: ' + point);
 		};
 
 		if (posthash.hasOwnProperty(point)) {
@@ -45,10 +45,10 @@
 	};
 
 	CLARITY.prototype.push = function push (work_obj) {
-		work_obj['do'] = work_obj['do'] || function(){};
+		work_obj['run'] = work_obj['run'] || function(){};
 		work_obj['use'] = work_obj['use'] || [];
 
-		work_obj['do'].apply(this, process_dependencies(work_obj['use']));
+		work_obj['run'].apply(this, process_dependencies(work_obj['use']));
 	};
 
 	return CLARITY;

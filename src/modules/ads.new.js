@@ -44,28 +44,25 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 
 	__.augment(Ad, __.PubSubPattern);
 
-	Ad.prototype.display = function display (network_code, site_code, zone) {
+	Ad.prototype.display = function display (network_code, site_code, zone, keywords_map) {
 		var self = this;
 
 		googletag.cmd.push(function(){
-			console.log('display!');
-			var adSlot = googletag.defineSlot('/'+network_code+'/'+site_code+'/'+zone, self.options.sizes, self.id);
-			console.dir({
-				network_code: network_code,
-				site_code: site_code,
-				zone: zone,
-				sizes: self.options.sizes,
-				id: self.id
-			});
+			var adSlot = googletag.defineSlot(__.sprintf('/%s/%s/%s', network_code, site_code, zone), self.options.sizes, self.id);
+			self.gpt_slot = adSlot;
 
 			adSlot.addService(googletag.pubads());
+
 			adSlot.setTargeting('pos', self.options.position);
 			adSlot.setTargeting('tile', self.options.tile); // Please verify that this is being used.
+
+			_.each(keywords_map, function(value, key, dict){
+				adSlot.setTargeting(key, value);
+			});
+
 			googletag.display(self.id); // requests for this ad
 
-			self.gpt_slot = adSlot;
 			self.fire('display');
-			console.log(adSlot);
 		});
 	};
 
@@ -81,23 +78,115 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 	var AdManager = function AdManager () {
 		var self = this;
 
-		self.site_code = ''; // site ID passed by initialize
-		self.zone = ''; // page type passed by initialize
+		self.site_code = ''; // site ID
+		self.zone = ''; // page type
 		self.network_code = 4700;
+		self.keywords = [];
+		self.keyword_map = {}; // collection of extensions keywords
 
 		self.stash = new __.Stash();
 		self.ad_list = [];
 		self.ads_by_id = {};
 
 		insertGPT(function(){
-			console.log('stash purge');
+			self.ingestKeywords(self.keywords);
 			self.stash.purge();
 		});
-
-		console.dir(self);
 	};
 
 	__.augment(AdManager, __.PubSubPattern);
+
+	AdManager.prototype.ingestKeywords = function ingestKeywords (keyword_list) {
+		var self = this;
+
+		// first, loop over all the keyword objects
+		var counter = keyword_list.length;
+		while (counter--) {
+			var current_obj = keyword_list[counter];
+
+			// second, check if these keywords apply to this page
+			var valid_paths = current_obj.paths.split(',');
+			if (!self.isValidPath(valid_paths)) {
+				continue;
+			};
+
+			var keywords = current_obj.keywords.split(',');
+		
+			// make the keypair map of values
+			var keypairs = {};
+			var dirty_keypairs = current_obj.keyvalues.split(';');
+			var dirty_keypairs_counter = dirty_keypairs.length;
+			while (dirty_keypairs_counter--) {
+				var pair = dirty_keypairs[dirty_keypairs_counter].split('=');
+				var key = pair[0], value = pair[1];
+
+				if (!keypairs.hasOwnProperty(key)) {
+					keypairs[key] = [];
+				}; 
+
+				keypairs[key].push(value);
+			};
+
+			var positions = current_obj.positions.split(',');
+
+			// the main keywords dataset is keyed by position name, so loop that next
+			var positions_counter = positions.length;
+			while (positions_counter--) {
+				var current_position = positions[positions_counter];
+
+				if (!self.keyword_map.hasOwnProperty(current_position)) {
+					self.keyword_map[current_position] = {};
+				};
+			
+				// for each position, populate the keywords
+				var keywords_counter = keywords.length;
+				while (keywords_counter--) {
+					var current_keyword = keywords[keywords_counter];
+					if (current_keyword) {
+						// per GPT, single value keywords need to pass a string containing 'true'
+						var obj = {};
+						obj[keywords[keywords_counter]] = 'true';
+						self.keyword_map[current_position].push(obj);
+					};
+				};
+
+				// for each position, populate the key-value pairs
+				_.extend(self.keyword_map[current_position], keypairs);
+			};
+		};
+
+		// apply 'all' position to the page, so all slot inherit
+		if (self.keyword_map.hasOwnProperty('all')) {
+			_.each(self.keyword_map.all, function(keyword_values, keyword_key){
+				googletag.pubads().setTargeting(keyword_key, keyword_values);
+			});
+		};
+	};
+
+	AdManager.prototype.isValidPath = function isValidPath (paths, location_override) {
+		var self = this;
+
+		var loc = location_override || (window.location.pathname + window.location.search + window.location.hash);
+
+		var counter = paths.length;
+		while (counter--) {
+			var pathstr = paths[counter];
+
+			if (pathstr === loc) {
+				return true;
+			
+			// user lead the path with a forward slash => check on root
+			} else if (pathstr.charAt(0) === '/' && loc.indexOf(pathstr) === 0) {
+				return true;
+
+			// then, if it exists in the location anywhere
+			} else if (loc.indexOf(pathstr) !== -1) {
+				return true;
+			};
+		};
+
+		return false;
+	};
 
 	AdManager.prototype.populate = function populate (selector) {
 		var self = this;
@@ -124,14 +213,12 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 		var self = this;
 
 		self.stash.push(function(){
-			console.log('making new ad');
 			var new_ad = new Ad(params);
-			console.dir(new_ad);
 
 			self.ad_list.push(new_ad);
 			self.ads_by_id[new_ad.id] = new_ad;
 			self.fire('create_ad', new_ad);
-			new_ad.display(self.network_code, self.site_code, self.zone);
+			new_ad.display(self.network_code, self.site_code, self.zone, self.keyword_map[params.position] || {});
 		});
 	};
 
@@ -152,8 +239,6 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 			_.invoke(affected_ads, 'fire', 'refresh');
 			self.fire('refresh', affected_ads);
 		} else if (self.ads_by_id.hasOwnProperty(id)) {
-			console.log('here!');
-
 			self.ads_by_id[id].refresh();
 			self.fire('refresh', [self.ads_by_id[id]]);
 		};
