@@ -110,6 +110,8 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 				continue;
 			};
 
+			console.log(current_obj);
+
 			var keywords = current_obj.keywords.split(',');
 		
 			// make the keypair map of values
@@ -151,7 +153,13 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 				};
 
 				// for each position, populate the key-value pairs
-				_.extend(self.keyword_map[current_position], keypairs);
+				_.each(keypairs, function(value, key){
+					if (!self.keyword_map[current_position].hasOwnProperty(key)) {
+						self.keyword_map[current_position][key] = [];
+					};
+
+					self.keyword_map[current_position][key].push(value);
+				});
 			};
 		};
 

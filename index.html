@@ -4,7 +4,7 @@
 	<meta charset="utf-8"/>
 	<title>library</title>
 
-	<script type="text/javascript" src="http://cdn.extensions.buzznet.com/topscript.js.php?siteToken=AP"></script>
+	<script type="text/javascript" src="http://cdn.extensions.buzznet.com/topscript.js.php?siteToken=PB"></script>
 
 	<style type="text/css">
 
@@ -42,22 +42,22 @@
 		CLARITY.push({
 			use: ['jquery', 'ads'],
 			run: function($, Ads){
-				Ads.site_code = 'buz.apunk';
-				Ads.zone = 'forums';
+				Ads.site_code = 'buz.pitnb';
+				Ads.zone = 'permalink';
 				Ads.keywords = window.extensionsKeywords;
 
 				// static ads
-				Ads.populate('.OMGAD');
-				Ads.autoPopulate();
+				// Ads.populate('.OMGAD');
+				// Ads.autoPopulate();
 	
 				// dynamic ads, immediately
 				var new_div = document.createElement('div');
 				$('.dynamic_ads').append(new_div);
 
 				Ads.createAd({
-					sizes: [[728,90]],
-					position: '728a',
-					tile: 3,
+					sizes: [[300,250], [300,600], [300,1050]],
+					position: '300a',
+					tile: 2,
 					element: new_div
 				});
 
