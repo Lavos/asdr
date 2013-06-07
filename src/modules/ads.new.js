@@ -155,12 +155,34 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 			};
 		};
 
+		// special debug query params
+
+		if (__.queryParams['dfpKeyval']) {
+			var dfp_keyvals = __.queryParams['dfpKeyval'].split(',');
+
+			var dfp_keyvals_counter = dfp_keyvals.length;
+			while (dfp_keyvals_counter--) {
+				var pair = dfp_keyvals[dfp_keyvals_counter].split(':');
+				var key = pair[0], value = pair[1];
+
+				__.definePath(self, 'keyword_map.all.' + key, []);
+				self.keyword_map.all[key].push(value);
+			};
+		};
+
+		if (__.queryParams['dfpKeyword']) {
+			var dfp_keyword = __.queryParams['dfpKeyword'];
+			__.definePath(self, 'keyword_map.all.' + dfp_keyword, []);
+			self.keyword_map.all[dfp_keyword].push('true');
+		};
+
 		// apply 'all' position to the page, so all slot inherit
 		if (self.keyword_map.hasOwnProperty('all')) {
 			_.each(self.keyword_map.all, function(keyword_values, keyword_key){
 				googletag.pubads().setTargeting(keyword_key, keyword_values);
 			});
 		};
+
 	};
 
 	AdManager.prototype.isValidPath = function isValidPath (paths, location_override) {
