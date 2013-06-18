@@ -11,7 +11,6 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 		var useSSL = 'https:' == document.location.protocol;
 		var js_file = IS_MOBILE ? 'gpt_mobile.js' : 'gpt.js';
 		gpt_script.src = (useSSL ? 'https:' : 'http:') + '//www.googletagservices.com/tag/js/' + js_file;
-		// gpt_script.src = '//www.googletagservices.com/tag/js/gpt.js';
 
 		__.onLoad(gpt_script, function(){
 			googletag.pubads().collapseEmptyDivs();
@@ -48,7 +47,14 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 		var self = this;
 
 		googletag.cmd.push(function(){
-			var adSlot = googletag.defineSlot(__.sprintf('/%s/%s/%s', network_code, site_code, zone), self.options.sizes, self.id);
+			var code_path = __.sprintf('/%s/%s/%s', network_code, site_code, zone);
+
+			if (self.options['out-of-page']) {
+				var adSlot = googletag.defineOutOfPageSlot(code_path, self.id);
+			} else {
+				var adSlot = googletag.defineSlot(code_path, self.options.sizes, self.id);
+			};
+
 			self.gpt_slot = adSlot;
 
 			adSlot.addService(googletag.pubads());
@@ -226,6 +232,7 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 				sizes: $this.data('sizes'),
 				position: $this.data('position'),
 				tile: $this.data('tile'),
+				'out-of-page': $this.data('out-of-page') || false,
 				element: this
 			});
 		});
