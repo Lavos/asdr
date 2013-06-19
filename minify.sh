@@ -1,8 +1,9 @@
 #!/bin/bash
 
 rm ./bin/*.js
+rm ./bin/modules/*.js
 
-for script in $(ls ./src/*.js)
+for script in ./src/*.js
 do
 	filename=$(basename "$script")
 	extension="${filename##*.}"
@@ -18,7 +19,7 @@ do
 	echo "$blob" > ./bin/$filename.min.$extension
 done
 
-for script in $(ls ./src/modules/*.js)
+for script in ./src/modules/*.js
 do
 	filename=$(basename "$script")
 	extension="${filename##*.}"
