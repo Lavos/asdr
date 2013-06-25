@@ -1510,19 +1510,22 @@ CLARITY.provide('doubleunderscore', [], function(){
 
 			self.callbacks = [];
 			self.args = [];
+			self.contexts = [];
 			self.purged = false;
 		};
 
-		__.Stash.prototype.push = function push (callback, args) {
+		__.Stash.prototype.push = function push (callback, args, context) {
 			var self = this;
 
 			args = args || [];
+			context = context || self;	
 
 			if (self.purged) {
-				callback.apply(self, args);
+				callback.apply(context, args);
 			} else {
 				self.callbacks.push(callback);
 				self.args.push(args);
+				self.contexts.push(context);
 			};
 		};
 
@@ -1534,7 +1537,7 @@ CLARITY.provide('doubleunderscore', [], function(){
 
 				var counter = 0, limit = self.callbacks.length;
 				while (counter < limit) {
-					self.callbacks[counter].apply(self, self.args[counter]);
+					self.callbacks[counter].apply(self.contexts[counter], self.args[counter]);
 					counter++;
 				};
 			};
