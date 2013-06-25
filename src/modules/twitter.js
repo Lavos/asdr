@@ -8,7 +8,7 @@ CLARITY.provide('twitter', ['doubleunderscore'], function(__){
 		window['twttr'] = window['twttr'] || (t = { _e: [], ready: function(f){ t._e.push(f) } });
 
 		window['twttr'].ready(function(){
-			self.jsapi = window.twttr;
+			self.jsapi = window['twttr'];
 			self.fire('ready');
 			self.stash.purge();
 		});
