@@ -3,25 +3,15 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 	var IS_MOBILE = WINDOW_WIDTH < 728;
 
 	function insertGPT (callback) {
-		// add async GPT javascript to page
-		var gpt_script = document.createElement('script');
-		gpt_script.async = true;
-		gpt_script.type = 'text/javascript';
+		var src = ('https:' === document.location.protocol ? 'https:' : 'http:') + '//www.googletagservices.com/tag/js/gpt.js';
 
-		var useSSL = 'https:' == document.location.protocol;
-		var js_file = IS_MOBILE ? 'gpt_mobile.js' : 'gpt.js';
-		gpt_script.src = (useSSL ? 'https:' : 'http:') + '//www.googletagservices.com/tag/js/' + js_file;
-
-		__.onLoad(gpt_script, function(){
+		__.addJS(src, function(){
 			googletag.pubads().collapseEmptyDivs();
 			googletag.pubads().enableAsyncRendering();
 			// googletag.pubads().enableSingleRequest();
 			googletag.enableServices();
 			callback();
 		});
-
-		var node = document.getElementsByTagName('script')[0];
-		node.parentNode.insertBefore(gpt_script, node);
 	};
 
 	// Ad Constructor

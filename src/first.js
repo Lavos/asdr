@@ -7,22 +7,22 @@
 		root['CLARITY'].list = list;
 	};
 })(window, function(){
+	var prehash = {}, posthash = {};
+
 	var CLARITY = function CLARITY (){
 		this.start_time = new Date();
-		this.prehash = {};
-		this.posthash = {};
 	};
 
 	CLARITY.prototype.store = function store (point) {
-		if (!this.prehash.hasOwnProperty(point)) {
+		if (!prehash.hasOwnProperty(point)) {
 			throw('[CLARITY] Unknown reference identifier: ' + point);
 		};
 
-		if (this.posthash.hasOwnProperty(point)) {
+		if (posthash.hasOwnProperty(point)) {
 			return;
 		};
 
-		this.posthash[point] = this.prehash[point].singleton.apply(this, this.process_dependencies(this.prehash[point].depends));
+		posthash[point] = prehash[point].singleton.apply(this, this.process_dependencies(prehash[point].depends));
 	};
 
 	CLARITY.prototype.process_dependencies = function process_dependencies (dependencies) {
@@ -30,7 +30,7 @@
 		while (counter < limit) {
 			var current = dependencies[counter];
 			this.store(current);
-			args.push(this.posthash[current]);
+			args.push(posthash[current]);
 			counter++;
 		};
 
@@ -38,7 +38,7 @@
 	};
 
 	CLARITY.prototype.provide = function provide (point, depends, singleton) {
-		this.prehash[point] = {
+		prehash[point] = {
 			singleton: singleton,
 			depends: depends
 		};
