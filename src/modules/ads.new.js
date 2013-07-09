@@ -22,22 +22,33 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 			sizes: [],
 			position: '',
 			tile: '',
-			element: null
+			element: null,
+			zone: '',
+			id: null
 		};
 
 		self.options = _.defaults(params, defaults);
 		self.element = self.options.element || document.createElement('div');
-		self.id = (self.element.id ? self.element.id : self.element.id = _.uniqueId('ad_'));
+
+		if (self.options.id) {
+			self.id = self.options.id;
+		} else if (self.element.id) {
+			self.id = self.element.id;
+		} else {
+			self.id = _.uniqueId('ad_');
+		};
+
+		self.element.id = self.id;
 		self.gpt_slot = null;
 	};
 
 	__.augment(Ad, __.PubSubPattern);
 
-	Ad.prototype.display = function display (network_code, site_code, zone, keywords_map) {
+	Ad.prototype.display = function display (network_code, site_code, keywords_map) {
 		var self = this;
 
 		googletag.cmd.push(function(){
-			var code_path = __.sprintf('/%s/%s/%s', network_code, site_code, zone);
+			var code_path = __.sprintf('/%s/%s/%s', network_code, site_code, self.options.zone);
 
 			if (self.options['out-of-page']) {
 				var adSlot = googletag.defineOutOfPageSlot(code_path, self.id);
@@ -107,7 +118,7 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 			};
 
 			var keywords = current_obj.keywords.split(',');
-		
+
 			// make the keypair map of values
 			var keypairs = {};
 			var dirty_keypairs = current_obj.keyvalues.split(';');
@@ -118,7 +129,7 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 
 				if (!keypairs.hasOwnProperty(key)) {
 					keypairs[key] = [];
-				}; 
+				};
 
 				keypairs[key].push(value);
 			};
@@ -133,7 +144,7 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 				if (!self.keyword_map.hasOwnProperty(current_position)) {
 					self.keyword_map[current_position] = {};
 				};
-			
+
 				// for each position, populate the keywords
 				var keywords_counter = keywords.length;
 				while (keywords_counter--) {
@@ -198,7 +209,7 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 
 			if (pathstr === loc) {
 				return true;
-			
+
 			// user lead the path with a forward slash => check on root
 			} else if (pathstr.charAt(0) === '/' && loc.indexOf(pathstr) === 0) {
 				return true;
@@ -212,38 +223,50 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 		return false;
 	};
 
+	AdManager.prototype.processElement = function processElement (element) {
+		var self = this;
+
+		var $element = $(element);
+		var settings = {
+			sizes: $element.data('sizes'),
+			position: $element.data('position'),
+			tile: $element.data('tile'),
+			'out-of-page': $element.data('out-of-page') || false,
+			element: element
+		};
+
+		if ($element.data('zone')) {
+			settings['zone'] = $element.data('zone');
+		};
+
+		self.createAd(settings);
+	};
+
 	AdManager.prototype.populate = function populate (selector) {
 		var self = this;
 
 		$(selector).each(function(){
-			var $this = $(this);
-
-			self.createAd({
-				sizes: $this.data('sizes'),
-				position: $this.data('position'),
-				tile: $this.data('tile'),
-				'out-of-page': $this.data('out-of-page') || false,
-				element: this
-			});
+			self.processElement(this);
 		});
 	};
 
 	AdManager.prototype.autoPopulate = function () {
 		var self = this;
 
-		self.populate(IS_MOBILE ? '.ad_mobile' : '.ad_desktop');	
+		self.populate(IS_MOBILE ? '.ad_mobile' : '.ad_desktop');
 	};
 
 	AdManager.prototype.createAd = function createAd (params) {
 		var self = this;
 
 		self.stash.push(function(){
-			var new_ad = new Ad(params);
+			var settings = _.defaults(params, { zone: self.zone });
+			var new_ad = new Ad(settings);
 
 			self.ad_list.push(new_ad);
 			self.ads_by_id[new_ad.id] = new_ad;
 			self.fire('create_ad', new_ad);
-			new_ad.display(self.network_code, self.site_code, self.zone, self.keyword_map[params.position] || {});
+			new_ad.display(self.network_code, self.site_code, self.keyword_map[settings.position] || {});
 		});
 	};
 
