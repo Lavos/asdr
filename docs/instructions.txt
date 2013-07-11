@@ -1,0 +1,51 @@
+Clarity is a asynchronous library, like Google Analytics and Facebook.
+
+First, include this JavaScript tag before the closing </head> tag.
+
+<script type="text/javascript">
+	(function(){
+		window['CLARITY'] = [];
+		var ns = document.createElement('script'), s = document.getElementsByTagName('script')[0];
+		ns.async = true; ns.type = 'text/javascript'; ns.src = '//lib.spinmedia.com/clarity.min.js'; s.parentNode.insertBefore(ns, s);
+	})();
+</script>
+
+Second, place special div elements within your html structure to hold the GPT-inserted iFrames.
+
+For example, this div represents the 728a slot:
+<div class="ad_desktop" data-sizes="[[728, 90]]" data-position="728a" data-tile="2"></div>
+
+The properties are as follows:
+
+classes, optional, used for autopopulation
+	"ad_desktop": ads are only inserted into this element when browser width is > 728
+	"ad_mobile": ads are only inserted into this element when browser width is <= 728
+
+data- properties:
+	for out-of-page ads:
+		data-out-of-page: optional, if defined, no need to pass data-position, data-sizes, or data-tile. Specifies the div to insert out-of-page iFrames for skins / overlays. This div can most likely appear anywhere on the page.
+
+	otherwise, for normal in-context ads:
+		data-sizes: required, an array of arrays specifying the applicable widths, heights for creatives in this position.
+			format: [[width integer, height integer], ... ] 
+		data-position: required, name of the position as defined in DFP
+		data-tile: optional, legacy support for BuzzMedia
+
+
+Near the bottom of the page, after all the "ad divs" are in the DOM, use this code to initialize and render the ads:
+
+<script type="text/javascript">
+	CLARITY.push({	
+		use: ['ads'],
+		run: function(Ads){
+			Ads.site_code = 'YOUR.SITE.CODE';
+			Ads.zone = 'THIS.PAGE.ZONE';
+			Ads.keywords = window.extensionsKeywords;
+			Ads.autoPopulate();
+		}
+	});
+</script>
+
+If using topscript, window.extensionsKeywords should be defined thus exposing the page's keyval pairs and keywords to Clarity.
+
+Because GPT uses Friendly iFrames, the scripts within the inserted iFrames have access to the top-most window via window.top to access the DOM of the host site. This is required for creatives that require code on the host-site to function.
