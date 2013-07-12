@@ -965,6 +965,30 @@ CLARITY.provide('doubleunderscore', [], function(){
 		return node;
 	};
 
+	__.hasPath = (function (source, pathstr) {
+		function dive (point, index, properties) {
+			var prop_name = properties[index];
+
+			try {
+				if (typeof point === 'object' && point.hasOwnProperty(prop_name)) {
+					if (index === properties.length-1) {
+						return true;
+					} else {
+						return dive(point[prop_name], ++index, properties);
+					};
+				} else {
+					return false;
+				};
+			} catch (e) {
+				return false;
+			};
+		};
+
+		return function(obj, pathstr) {
+			return dive(obj, 0, pathstr.split('.'));
+		};
+	})();
+
 	// adapted from: http://javascriptweblog.wordpress.com/2011/08/08/fixing-the-javascript-typeof-operator/
 	__.getType = __.getClass = (function(obj) {
 		var class_regex = /\s([a-zA-Z]+)/;

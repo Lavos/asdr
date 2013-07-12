@@ -24,7 +24,8 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 			tile: '',
 			element: null,
 			zone: '',
-			id: null
+			id: null,
+			targeting: {}
 		};
 
 		self.options = _.defaults(params, defaults);
@@ -64,6 +65,10 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 			adSlot.setTargeting('tile', self.options.tile); // Please verify that this is being used.
 
 			_.each(keywords_map, function(value, key, dict){
+				adSlot.setTargeting(key, value);
+			});
+
+			_.each(self.options.targeting, function(value, key, dict){
 				adSlot.setTargeting(key, value);
 			});
 
@@ -232,6 +237,7 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 			position: $element.data('position'),
 			tile: $element.data('tile'),
 			'out-of-page': $element.data('out-of-page') || false,
+			targeting: $element.data('targeting'),
 			element: element
 		};
 
@@ -250,10 +256,18 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 		});
 	};
 
-	AdManager.prototype.autoPopulate = function () {
+	AdManager.prototype.autoPopulate = function autoPopulate () {
 		var self = this;
 
 		self.populate(IS_MOBILE ? '.ad_mobile' : '.ad_desktop');
+	};
+
+	AdManager.prototype.addPageTargeting = function addPageTargeting (key, value) {
+		var self = this;
+
+		self.stash.push(function(){
+			googletag.pubads().setTargeting(key, value);
+		});
 	};
 
 	AdManager.prototype.createAd = function createAd (params) {
@@ -290,7 +304,6 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 			self.ads_by_id[id].refresh();
 			self.fire('refresh', [self.ads_by_id[id]]);
 		};
-
 	};
 
 	return new AdManager();
