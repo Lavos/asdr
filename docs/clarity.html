@@ -1,0 +1,441 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>Clarity Documentation</title>
+
+	<link rel="stylesheet" type="text/css" href="bootstrap.min.css" media="all"/>
+
+	<style type="text/css">
+		#master { padding: 0 0 100% 0; }
+		section { margin: 0 0 70px 0; }
+		#movenav { position: fixed; top: 10px; -webkit-transform: translateZ(0); }
+			#movenav ul { position: relative; }
+
+		dl { margin: 1em 2em 2em 2em; }
+			dl dt { margin: 1.75em 0 .5em 0; }
+			dl dd { margin: 0 0 .5em 1em; }
+	
+		dt small { color: #aaa; margin: 0 0 0 1em; font-weight: normal; }	
+
+		.method { margin: 0 0 40px 0; }
+			.method h4 { color: #4444aa; }
+			.method h5 { color: #aa44aa; }
+	</style>
+</head>
+
+<body>
+	<div id="master" class="container">
+		<div class="row">	
+			<nav class="span2">
+				<div id="movenav">
+					<ul class="nav nav-list">
+						<li class="nav-header">Clarity</li>
+						<li><a href="#clarity">Definition</a></li>
+						<li><a href="#implementation">Implementation</a></li>
+						<li><a href="#methods">Methods</a></li>
+						<li><a href="#usage">Usage</a></li>
+						<li class="divider"></li>
+
+						<li class="nav-header">GPT Ads Module</li>
+						<li><a href="#gpt_ads">Definition</a></li>
+						<li><a href="#gpt_properties">Properties</a></li>
+						<li><a href="#gpt_methods">Methods</a></li>
+						<li><a href="#gpt_usage">Usage</a></li>
+					</ul>
+				</div><!-- /#movenav -->
+			</nav>
+
+			<div class="span10">
+			<article>
+				<section id="clarity">
+					<h2>Clarity</h2>
+
+					<p>Clarity is a library that is:</p>
+
+					<ul>
+						<li>Asyncronous, like Google Analytics</li>
+						<li>Dependency Resolving, like Require.js</li>
+						<li>SpinMedia Globally Applicable</li>
+						<li>Site Agnostic</li>
+						<li>a Single File</li>
+						<li>comprised of modules, minified and mashed together</li>
+					</ul>
+				</section>
+
+				<section id="implementation">
+					<h3>Implementation</h3>
+
+					<p>The script loads asyncronously, so the page should not be blocked while loading the script source.</p>
+
+					<p>Include this script block before the the closing <code>&lt;/head&gt;</code> tag:</p>
+
+<pre>&lt;script type="text/javascript"&gt;
+	(function(){
+		window['CLARITY'] = [];
+		var ns = document.createElement('script'), s = document.getElementsByTagName('script')[0];
+		ns.async = true; ns.type = 'text/javascript'; ns.src = '//lib.spinmedia.com/clarity.min.js'; s.parentNode.insertBefore(ns, s);
+	})();
+&lt;/script&gt;</pre>
+
+				</section>
+
+				<section id="methods">
+					<h3>Methods</h3>
+
+					<div class="method">
+						<h4>.push(work_object)</h4>
+
+						<h5>Arguments</h5>
+						<dl>
+							<dt>work_object <small>object</small></dt>
+							<dd>An object that defines a function to be run when the script is ready (or already ready) and specifies which modules this function requires as arguments.</dd>
+						</dl>
+
+						<h5>Work Object Properties</h5>
+						<dl>
+							<dt>use <small>array of strings</small></dt>
+							<dd>an array of module name strings you would like to use in your <code>run</code> function</dd>
+							<dd>Example: <code>use: ['jquery', 'underscore']</code>
+
+							<dt>run <small>function</small></dt>
+							<dd>a function that is executed when Clarity is loaded (immediately, if already loaded) whose arguments are modules you specify in <code>use</code> property</dd>
+							<dd>Example: <code>run: function($, _){ }</code>
+
+						</dl>
+
+						<h5>Example</h5>
+
+<pre>&lt;script type="text/javascript"&gt;
+	CLARITY.push({
+		use: ['jquery'], // I want to use jQuery
+		run: function($){ // I want jQuery to be called "$" inside this closure
+			// jQuery is defined here as "$"
+		}
+	});
+&lt;/script&gt;</pre>
+
+
+					</div><!-- /.method -->
+				</section>
+
+				<section id="usage">
+					<h3>Usage</h3>
+
+					<p>With Clarity, you are primarily using a single method <code>.push()</code>. This method is both a native array method, and a method on Clarity once it's initialized. To run commands within Clarity, you will be passing a special object called a <strong>Work Object</strong> (outlined in the <a href="#methods">Methods</a> section above).
+
+					<p>Here's an example usage:</p>
+
+<pre>&lt;script type="text/javascript"&gt;
+	CLARITY.push({
+		use: ['jquery', 'underscore'],
+		run: function($, _){
+			var list = ['abc', 'xyz', 'def'];
+			
+			$(document).on('click', function(){
+				alert(_.shuffle(list));
+			});
+		}
+	});
+&lt;/script&gt;</pre>
+				</section>
+			</article>
+
+			<article>
+				<section id="gpt_ads">
+					<h2>GPT Ads Module</h2>
+
+					<p>This module manages loading and using Google Publisher Tags for SpinMedia accounts. There's a number of convenience methods and schemas for quick insertion of ads on our properites.</p>
+				</section>
+
+				<section id="gpt_properties">
+					<h3>Properties</h3>
+
+					<p>These properties exist on the GPT Ads Module object, and may be accessed within the Work Object's <code>run</code> function.</p>
+
+					<dl>
+						<dt>.site_code <small>string</small></dt>
+						<dd>SpinMedia defined site code used by DFP for targetting specific sites.</dd>
+						<dd>Example: <code>Ads.site_code = 'buz.celebuzz';</code></dd>
+
+						<dt>.zone <small>string</small></dt>
+						<dd>SpinMedia defined page type used by DFP for targetting specific pages, page wide.</dd>
+						<dd>Example: <code>Ads.zone = 'homepage';</code></dd>
+
+						<dt>.ads_list <small>array</small></dt>
+						<dd>An array of all the Ad objects created by the GPT Ads Module.</dd>
+
+						<dt>.ads_by_id <small>object</small></dt>
+						<dd>A hash of all the Ad objects created by the GPT Ads Module keyed by their id property. Used internally by <code>.refresh()</code>.
+
+					</dl>
+
+				</section>
+
+				<section id="gpt_methods">
+					<h3>Methods</h3>
+
+					<div class="method">
+						<h4>.addPageTargeting(key, value)</h4>
+						<p>Adds page-wide DFP targeting values to all calls to GPT.</p>
+
+						<h5>Arguments</h5>
+						<dl>
+							<dt>key <small>string</small></dt>
+							<dd>The key name for the property name within DFP.</dd>
+
+							<dt>value <small>string or array of strings</small></dt>
+							<dd>The value to set for the key provided. Can be a string or array of strings.</dd>
+						</dl>
+
+						<h5>Example</h5>
+<pre>&lt;script type="text/javascript"&gt;
+	CLARITY.push({
+		use: ['ads'], 
+		run: function(Ads){
+			Ads.addPageTargeting('categories', ['bananas', 'hammocks', 'cars']);
+		}
+	});
+&lt;/script&gt;</pre>
+
+
+					</div><!-- /.method -->
+
+					<div class="method">
+						<h4>.autoPopulate()</h4>
+						<p>Convenience function for populating ads using DOM elements with either <code>ad_desktop</code> or <code>ad_mobile</code> classes.</p>
+
+						<p>When invoked, it runs <code>.populate()</code> internally passing either <code>".ad_desktop"</code> or <code>".ad_mobile"</code> depending on an internal check of the device width.</p>
+
+						<h5>Example</h5>
+<pre>&lt;script type="text/javascript"&gt;
+	CLARITY.push({
+		use: ['ads'], 
+		run: function(Ads){
+			Ads.site_code = 'buz.celebuzz';
+			Ads.zone = 'homepage';
+			Ads.autoPopulate();
+		}
+	});
+&lt;/script&gt;</pre>
+
+
+					</div><!-- /.method -->
+
+					<div class="method">
+						<h4>.createAd(params)</h4>
+						<p>Creates a new Ad object. Used internally by <code>.processElement()</code> to create Ad objects. Provides the most direct control.</p>
+
+						<h5>Arguments</h5>
+						<dl>
+							<dt>params <small>object</small></dt>
+							<dd>an object with a series of ad-specific settings.</dd>
+						</dl>
+
+						<h5>Params Object Properties</h5>
+						<dl>
+							<dt>sizes <small>array of arrays of integers</small></dt>
+							<dd>an array of arrays of integers corrresponding to the width, height of applicable ads for this slot.</dd>
+							<dd>Example: <code>sizes: [[300, 250], [300, 600]]</code></dd>
+
+							<dt>position <small>string</small></dt>
+							<dd>Position name for this slot, used by DFP for targeting.</dd>
+							<dd>Example: <code>position: '728a'</code></dd>
+
+							<dt>element <small>DOM element</small></dt>
+							<dd>The element for GPT to target to insert iframes into.</dd>
+							<dd>Example: <code>element: documentGetElementById('bananas')</code></dd>
+
+							<dt>tile <small>integer</small> <span class="label">optional</span> <span class="label label-warning">legacy</span></dt>
+							<dd>Tile value. Unknown usage.</dd>
+							<dd>Example: <code>tile: 3</code></dd>
+							<dd><em>default:</em> null</dd>
+
+							<dt>zone <small>string</small> <span class="label">optional</span></dt>
+							<dd>Ad-specific zone targetting that overrides the page-specific setting of Ads.zone.</dd>
+							<dd>Example: <code>zone: 'homepage'</code></dd>
+							<dd><em>default:</em> uses the page-wide zone from Ads.zone</dd>
+
+							<dt>id <small>string</small> <span class="label">optional</span></dt>
+							<dd>Define the id of the Ad object. This becomes it's key in the Ads.ads_by_id hash. This setting overrides all other id logic.</dd>
+							<dd>Example: <code>id: 'bananas'</code></dd>
+							<dd><em>default:</em> the element's ID, if set. If unset, a unique ID is generated internally.</dd>
+
+							<dt>out-of-page <small>boolean</small> <span class="label">optional</span></dt>
+							<dd>Define this ad slot as "out of page", ie: skins, overlays.</dd>
+							<dd>Example: <code>'out-of-page': true</code></dd>
+							<dd><em>default:</em> false</dd>
+
+							<dt>targeting <small>object</small> <span class="label">optional</span></dt>
+							<dd>An object detailing key-value pairs to be passed to GPT for ad-specific targeting. Values can either be a string, or an array of strings.</dd>
+							<dd>Example: <code>targeting: { 'bananas': 'hammocks' }</code></dd>
+							<dd><em>default:</em> {}</dd>
+						</dl>
+
+						<h5>Example</h5>
+
+<pre>&lt;script type="text/javascript"&gt;
+	CLARITY.push({
+		use: ['ads'], 
+		run: function(Ads){
+			Ads.site_code = 'buz.celebuzz';
+			Ads.zone = 'homepage';
+
+			var elem = document.createElement('div');
+			document.body.appendChild(elem);
+			Ads.createAd({
+				sizes: [[300, 250], [300, 600]],
+				position: '300a',
+				element: elem,
+				id: 'bananas'	
+			});
+		}
+	});
+&lt;/script&gt;</pre>
+
+					</div><!-- /.method -->
+					
+					<div class="method">
+						<h4>.populate(selector)</h4>
+						<p>Targets a list of elements based on the passed selector, reads <code>data-</code> attributes, and makes applicable ad calls to GPT. Uses <code>.processElement()</code> internally.</p>
+
+						<h5>Arguments</h5>
+						<dl>
+							<dt>selector <small>string</small></dt>
+							<dd>a string containing a css selector. This string is passed to jQuery interally, so any Sizzle engine syntax is valid.</dd>
+						</dl>
+
+						<h5>Example</h5>
+
+<pre>&lt;div class="ad_bananas" data-sizes="[[300, 250], [300, 600]]" data-position="300a"&gt;&lt;/div&gt;
+
+&lt;script type="text/javascript"&gt;
+	CLARITY.push({
+		use: ['ads'], 
+		run: function(Ads){
+			Ads.site_code = 'buz.celebuzz';
+			Ads.zone = 'homepage';
+
+			Ads.populate('.ad_bananas');
+		}
+	});
+&lt;/script&gt;</pre>
+					</div><!-- /.method -->
+
+					<div class="method">
+						<h4>.processElement(element)</h4>
+						<p>Reads a series of <code>data-</code> attributes on the passed element, and runs <code>.createAd()</code> internally to create an Ad object.</p>
+
+						<h5>Arguments</h5>
+						<dl>
+							<dt>element <small>DOM element</small></dt>
+							<dd>The DOM element to be processed. This element should have a series of <code>data-</code> attributes that correlate to <code>.createAd()</code> params.</dd>
+						</dl>
+
+						<h5>Data- Attributes</h5>
+
+						<dl>
+							<dt>data-sizes <small>array of arrays of integers</small></dt>
+							<dd>An array of array of integers that specifies that valid widths and heights of creatives for this slot. Correlates directly to <code>.createAd()</code> <code>sizes</code> property.</dd>
+							<dd>Example: <code>data-sizes="[[300, 250], [300, 600]]"</code></dd>
+
+							<dt>data-position <small>string</small></dt>
+							<dd>Position name for this slot, used by DFP for targeting. Correlates directly to <code>.createAd()</code> <code>position</code> property.</dd>
+							<dd>Example: <code>data-position="300a"</code></dd>
+
+							<dt>data-tile <small>integer</small> <span class="label">optional</span></dt>
+							<dd>Tile value for this slot, used by DFP for targeting? Correlates directly to <code>.createAd()</code> <code>tile</code> property.</dd>
+							<dd>Example: <code>data-tile="3"</code></dd>
+
+							<dt>data-zone <small>integer</small> <span class="label">optional</span></dt>
+							<dd>Ad-specific targeting zone, overrides page-specific settings via Ads.zone. Correlates directly to <code>.createAd()</code> <code>zone</code> property.</dd>
+							<dd>Example: <code>data-zone="homepage"</code></dd>
+
+							<dt>data-out-of-page <small>boolean</small> <span class="label">optional</span></dt>
+							<dd>Defines if this slot is "out of page". Correlates directly to <code>.createAd()</code> <code>out-of-page</code> property.</dd>
+							<dd>Example: <code>data-out-of-page="true"</code></dd>
+	
+							<dt>data-targeting <small>JSON</small> <span class="label">optional</span></dt>
+							<dd>Specifies ad-specific targeting values. Correlates directly to <code>.createAd()</code> <code>targeting</code> property.</dd>
+							<dd><span class="label label-important">Important</span> This value must be valid <strong>JSON</strong>, meaning that keys must be quoted with double quotes (&quot;). Use single quotes (') to wrap this attribute.</dd>
+							<dd>Example: <code>data-targeting='{ "bananas": ["hammocks", "cars"] }'</code></dd>
+						</dl>
+
+						<h5>Example</h5>
+
+<pre>&lt;div id="bananas" data-sizes="[[300, 250], [300, 600]]" data-position="300a"&gt;&lt;/div&gt;
+
+&lt;script type="text/javascript"&gt;
+	CLARITY.push({
+		use: ['ads'], 
+		run: function(Ads){
+			Ads.site_code = 'buz.celebuzz';
+			Ads.zone = 'homepage';
+
+			var elem = document.getElementById('bananas');
+			Ads.processElement(elem);
+		}
+	});
+&lt;/script&gt;</pre>
+					</div><!-- /.method -->
+
+					<div class="method">
+						<h4>.refresh([id]);</h4>
+						<p>Refreshes either all add slots on the page, or the ad slot with the id specified.</p>
+
+						<h5>Arguments</h5>
+						<dl>
+							<dt>id <small>string</small> <span class="label">optional</span></dt>
+							<dd>The id of the Ad object.</dd>
+						</dl>
+
+						<h5>Example</h5>
+<pre>&lt;script type="text/javascript"&gt;
+	CLARITY.push({
+		use: ['jquery', 'ads'], 
+		run: function($, Ads){
+			$(document).on('click', function(){
+				Ads.refresh();
+			});
+		}
+	});
+&lt;/script&gt;</pre>
+					</div><!-- /.method -->
+				</section>
+
+				<section id="gpt_usage">
+					<h3>Usage</h3>
+
+					<p>The GPT Ads Module is defined as <code>ads</code> within Clarity. Use this name within your Work Object's <code>use</code> array.</p>
+
+					<div class="alert alert-info">
+						This module is a singleton; it is passed to the function ready to use. No <code>new</code> keyword usage required.
+					</div><!-- /.alert -->
+
+					<div class="alert alert-error">
+						In order to be configured properly, a couple of site and page specific settings must be set on the Ads object: <code>site_code</code> and <code>zone</code> must be set prior to calling any method.
+					</div><!-- /.alert -->
+
+					<p>Example of simple usage:</p>
+
+<pre>&lt;div class="ad_desktop" data-sizes="[[728, 90]]" data-position="728a"&gt;&lt;/div&gt;
+
+&lt;script type="text/javascript"&gt;
+	CLARITY.push({
+		use: ['ads'], // I want to use the GPT Ad Module
+		run: function(Ads){ // Call the GPT Ad Module "Ads" for this function
+			Ads.site_code = 'buz.celebuzz';
+			Ads.zone = 'homepage';
+			Ads.autoPopulate();
+		}
+	});
+&lt;/script&gt;</pre>
+
+				</section><!-- /#gpt_usage -->
+
+			</article>
+		</div><!-- /.row -->
+	</div><!-- /#master -->
+</body>
+</html>
+

@@ -25,6 +25,7 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 			element: null,
 			zone: '',
 			id: null,
+			'out-of-page': false,
 			targeting: {}
 		};
 
@@ -101,14 +102,14 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 		self.ads_by_id = {};
 
 		insertGPT(function(){
-			self.ingestKeywords(self.keywords);
+			self._ingestKeywords(self.keywords);
 			self.stash.purge();
 		});
 	};
 
 	__.augment(AdManager, __.PubSubPattern);
 
-	AdManager.prototype.ingestKeywords = function ingestKeywords (keyword_list) {
+	AdManager.prototype._ingestKeywords = function _ingestKeywords (keyword_list) {
 		var self = this;
 
 		// first, loop over all the keyword objects
@@ -118,7 +119,7 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 
 			// second, check if these keywords apply to this page
 			var valid_paths = current_obj.paths.split(',');
-			if (!self.isValidPath(valid_paths)) {
+			if (!self._isValidPath(valid_paths)) {
 				continue;
 			};
 
@@ -203,7 +204,7 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 
 	};
 
-	AdManager.prototype.isValidPath = function isValidPath (paths, location_override) {
+	AdManager.prototype._isValidPath = function _isValidPath (paths, location_override) {
 		var self = this;
 
 		var loc = location_override || (window.location.pathname + window.location.search + window.location.hash);
