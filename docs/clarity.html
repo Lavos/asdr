@@ -15,8 +15,8 @@
 		dl { margin: 1em 2em 2em 2em; }
 			dl dt { margin: 1.75em 0 .5em 0; }
 			dl dd { margin: 0 0 .5em 1em; }
-	
-		dt small { color: #aaa; margin: 0 0 0 1em; font-weight: normal; }	
+
+		dt small { color: #aaa; margin: 0 0 0 1em; font-weight: normal; }
 
 		.method { margin: 0 0 40px 0; }
 			.method h4 { color: #4444aa; }
@@ -26,7 +26,7 @@
 
 <body>
 	<div id="master" class="container">
-		<div class="row">	
+		<div class="row">
 			<nav class="span2">
 				<div id="movenav">
 					<ul class="nav nav-list">
@@ -131,7 +131,7 @@
 		use: ['jquery', 'underscore'],
 		run: function($, _){
 			var list = ['abc', 'xyz', 'def'];
-			
+
 			$(document).on('click', function(){
 				alert(_.shuffle(list));
 			});
@@ -191,7 +191,7 @@
 						<h5>Example</h5>
 <pre>&lt;script type="text/javascript"&gt;
 	CLARITY.push({
-		use: ['ads'], 
+		use: ['ads'],
 		run: function(Ads){
 			Ads.addPageTargeting('categories', ['bananas', 'hammocks', 'cars']);
 		}
@@ -210,7 +210,7 @@
 						<h5>Example</h5>
 <pre>&lt;script type="text/javascript"&gt;
 	CLARITY.push({
-		use: ['ads'], 
+		use: ['ads'],
 		run: function(Ads){
 			Ads.site_code = 'buz.celebuzz';
 			Ads.zone = 'homepage';
@@ -276,7 +276,7 @@
 
 <pre>&lt;script type="text/javascript"&gt;
 	CLARITY.push({
-		use: ['ads'], 
+		use: ['ads'],
 		run: function(Ads){
 			Ads.site_code = 'buz.celebuzz';
 			Ads.zone = 'homepage';
@@ -287,14 +287,14 @@
 				sizes: [[300, 250], [300, 600]],
 				position: '300a',
 				element: elem,
-				id: 'bananas'	
+				id: 'bananas'
 			});
 		}
 	});
 &lt;/script&gt;</pre>
 
 					</div><!-- /.method -->
-					
+
 					<div class="method">
 						<h4>.populate(selector)</h4>
 						<p>Targets a list of elements based on the passed selector, reads <code>data-</code> attributes, and makes applicable ad calls to GPT. Uses <code>.processElement()</code> internally.</p>
@@ -311,7 +311,7 @@
 
 &lt;script type="text/javascript"&gt;
 	CLARITY.push({
-		use: ['ads'], 
+		use: ['ads'],
 		run: function(Ads){
 			Ads.site_code = 'buz.celebuzz';
 			Ads.zone = 'homepage';
@@ -354,7 +354,7 @@
 							<dt>data-out-of-page <small>boolean</small> <span class="label">optional</span></dt>
 							<dd>Defines if this slot is "out of page". Correlates directly to <code>.createAd()</code> <code>out-of-page</code> property.</dd>
 							<dd>Example: <code>data-out-of-page="true"</code></dd>
-	
+
 							<dt>data-targeting <small>JSON</small> <span class="label">optional</span></dt>
 							<dd>Specifies ad-specific targeting values. Correlates directly to <code>.createAd()</code> <code>targeting</code> property.</dd>
 							<dd><span class="label label-important">Important</span> This value must be valid <strong>JSON</strong>, meaning that keys must be quoted with double quotes (&quot;). Use single quotes (') to wrap this attribute.</dd>
@@ -367,7 +367,7 @@
 
 &lt;script type="text/javascript"&gt;
 	CLARITY.push({
-		use: ['ads'], 
+		use: ['ads'],
 		run: function(Ads){
 			Ads.site_code = 'buz.celebuzz';
 			Ads.zone = 'homepage';
@@ -392,7 +392,7 @@
 						<h5>Example</h5>
 <pre>&lt;script type="text/javascript"&gt;
 	CLARITY.push({
-		use: ['jquery', 'ads'], 
+		use: ['jquery', 'ads'],
 		run: function($, Ads){
 			$(document).on('click', function(){
 				Ads.refresh();
