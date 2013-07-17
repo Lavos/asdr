@@ -15,14 +15,14 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 		});
 	};
 
-	function getAsiSegments () {
+	function getASISegments () {
 		var segments = [], seg_string = __.cookies.get('rsi_segs');
 
 		if (seg_string && seg_string.length) {
 			segments = seg_string.split('|');
 		};
 
-		return segments.slice(0, Math.min(segments.length, 20));
+		return segments.slice(0, 20);
 	};
 
 	// Ad Constructor
@@ -115,7 +115,7 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 			self._ingestKeywords(self.keywords);
 
 			// adding Audience Science cookie values
-			var asi_segments = getAsiSegments();
+			var asi_segments = getASISegments();
 
 			if (asi_segments.length) {
 				self.addPageTargeting('asi', asi_segments);
