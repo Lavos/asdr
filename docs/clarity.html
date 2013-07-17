@@ -70,13 +70,13 @@
 
 						<p>Include this script block before the the closing <code>&lt;/head&gt;</code> tag:</p>
 
-	<pre>&lt;script type="text/javascript"&gt;
-		(function(){
-			window['CLARITY'] = [];
-			var ns = document.createElement('script'), s = document.getElementsByTagName('script')[0];
-			ns.async = true; ns.type = 'text/javascript'; ns.src = '//lib.spinmedia.com/clarity.min.js'; s.parentNode.insertBefore(ns, s);
-		})();
-	&lt;/script&gt;</pre>
+<pre>&lt;script type="text/javascript"&gt;
+	(function(){
+		window['CLARITY'] = [];
+		var ns = document.createElement('script'), s = document.getElementsByTagName('script')[0];
+		ns.async = true; ns.type = 'text/javascript'; ns.src = '//lib.spinmedia.com/clarity.min.js'; s.parentNode.insertBefore(ns, s);
+	})();
+&lt;/script&gt;</pre>
 
 					</section>
 
@@ -106,14 +106,14 @@
 
 							<h5>Example</h5>
 
-	<pre>&lt;script type="text/javascript"&gt;
-		CLARITY.push({
-			use: ['jquery'], // I want to use jQuery
-			run: function($){ // I want jQuery to be called "$"
-				// jQuery is defined here as "$"
-			}
-		});
-	&lt;/script&gt;</pre>
+<pre>&lt;script type="text/javascript"&gt;
+	CLARITY.push({
+		use: ['jquery'], // I want to use jQuery
+		run: function($){ // I want jQuery to be called "$"
+			// jQuery is defined here as "$"
+		}
+	});
+&lt;/script&gt;</pre>
 
 
 						</div><!-- /.method -->
@@ -126,18 +126,18 @@
 
 						<p>Here's an example usage:</p>
 
-	<pre>&lt;script type="text/javascript"&gt;
-		CLARITY.push({
-			use: ['jquery', 'underscore'],
-			run: function($, _){
-				var list = ['abc', 'xyz', 'def'];
+<pre>&lt;script type="text/javascript"&gt;
+	CLARITY.push({
+		use: ['jquery', 'underscore'],
+		run: function($, _){
+			var list = ['abc', 'xyz', 'def'];
 
-				$(document).on('click', function(){
-					alert(_.shuffle(list));
-				});
-			}
-		});
-	&lt;/script&gt;</pre>
+			$(document).on('click', function(){
+				alert(_.shuffle(list));
+			});
+		}
+	});
+&lt;/script&gt;</pre>
 					</section>
 				</article>
 
@@ -189,14 +189,14 @@
 							</dl>
 
 							<h5>Example</h5>
-	<pre>&lt;script type="text/javascript"&gt;
-		CLARITY.push({
-			use: ['ads'],
-			run: function(Ads){
-				Ads.addPageTargeting('categories', ['bananas', 'hammocks', 'cars']);
-			}
-		});
-	&lt;/script&gt;</pre>
+<pre>&lt;script type="text/javascript"&gt;
+	CLARITY.push({
+		use: ['ads'],
+		run: function(Ads){
+			Ads.addPageTargeting('categories', ['bananas', 'hammocks', 'cars']);
+		}
+	});
+&lt;/script&gt;</pre>
 
 
 						</div><!-- /.method -->
@@ -208,16 +208,16 @@
 							<p>When invoked, it runs <code>.populate()</code> internally passing either <code>".ad_desktop"</code> or <code>".ad_mobile"</code> depending on an internal check of the device width.</p>
 
 							<h5>Example</h5>
-	<pre>&lt;script type="text/javascript"&gt;
-		CLARITY.push({
-			use: ['ads'],
-			run: function(Ads){
-				Ads.site_code = 'buz.celebuzz';
-				Ads.zone = 'homepage';
-				Ads.autoPopulate();
-			}
-		});
-	&lt;/script&gt;</pre>
+<pre>&lt;script type="text/javascript"&gt;
+	CLARITY.push({
+		use: ['ads'],
+		run: function(Ads){
+			Ads.site_code = 'buz.celebuzz';
+			Ads.zone = 'homepage';
+			Ads.autoPopulate();
+		}
+	});
+&lt;/script&gt;</pre>
 
 
 						</div><!-- /.method -->
@@ -274,24 +274,24 @@
 
 							<h5>Example</h5>
 
-	<pre>&lt;script type="text/javascript"&gt;
-		CLARITY.push({
-			use: ['ads'],
-			run: function(Ads){
-				Ads.site_code = 'buz.celebuzz';
-				Ads.zone = 'homepage';
+<pre>&lt;script type="text/javascript"&gt;
+	CLARITY.push({
+		use: ['ads'],
+		run: function(Ads){
+			Ads.site_code = 'buz.celebuzz';
+			Ads.zone = 'homepage';
 
-				var elem = document.createElement('div');
-				document.body.appendChild(elem);
-				Ads.createAd({
-					sizes: [[300, 250], [300, 600]],
-					position: '300a',
-					element: elem,
-					id: 'bananas'
-				});
-			}
-		});
-	&lt;/script&gt;</pre>
+			var elem = document.createElement('div');
+			document.body.appendChild(elem);
+			Ads.createAd({
+				sizes: [[300, 250], [300, 600]],
+				position: '300a',
+				element: elem,
+				id: 'bananas'
+			});
+		}
+	});
+&lt;/script&gt;</pre>
 
 						</div><!-- /.method -->
 
@@ -307,19 +307,19 @@
 
 							<h5>Example</h5>
 
-	<pre>&lt;div class="ad_bananas" data-sizes="[[300, 250], [300, 600]]" data-position="300a"&gt;&lt;/div&gt;
+<pre>&lt;div class="ad_bananas" data-sizes="[[300, 250], [300, 600]]" data-position="300a"&gt;&lt;/div&gt;
 
-	&lt;script type="text/javascript"&gt;
-		CLARITY.push({
-			use: ['ads'],
-			run: function(Ads){
-				Ads.site_code = 'buz.celebuzz';
-				Ads.zone = 'homepage';
+&lt;script type="text/javascript"&gt;
+	CLARITY.push({
+		use: ['ads'],
+		run: function(Ads){
+			Ads.site_code = 'buz.celebuzz';
+			Ads.zone = 'homepage';
 
-				Ads.populate('.ad_bananas');
-			}
-		});
-	&lt;/script&gt;</pre>
+			Ads.populate('.ad_bananas');
+		}
+	});
+&lt;/script&gt;</pre>
 						</div><!-- /.method -->
 
 						<div class="method">
@@ -363,20 +363,20 @@
 
 							<h5>Example</h5>
 
-	<pre>&lt;div id="bananas" data-sizes="[[300, 250], [300, 600]]" data-position="300a"&gt;&lt;/div&gt;
+<pre>&lt;div id="bananas" data-sizes="[[300, 250], [300, 600]]" data-position="300a"&gt;&lt;/div&gt;
 
-	&lt;script type="text/javascript"&gt;
-		CLARITY.push({
-			use: ['ads'],
-			run: function(Ads){
-				Ads.site_code = 'buz.celebuzz';
-				Ads.zone = 'homepage';
+&lt;script type="text/javascript"&gt;
+	CLARITY.push({
+		use: ['ads'],
+		run: function(Ads){
+			Ads.site_code = 'buz.celebuzz';
+			Ads.zone = 'homepage';
 
-				var elem = document.getElementById('bananas');
-				Ads.processElement(elem);
-			}
-		});
-	&lt;/script&gt;</pre>
+			var elem = document.getElementById('bananas');
+			Ads.processElement(elem);
+		}
+	});
+&lt;/script&gt;</pre>
 						</div><!-- /.method -->
 
 						<div class="method">
@@ -390,16 +390,16 @@
 							</dl>
 
 							<h5>Example</h5>
-	<pre>&lt;script type="text/javascript"&gt;
-		CLARITY.push({
-			use: ['jquery', 'ads'],
-			run: function($, Ads){
-				$(document).on('click', function(){
-					Ads.refresh();
-				});
-			}
-		});
-	&lt;/script&gt;</pre>
+<pre>&lt;script type="text/javascript"&gt;
+	CLARITY.push({
+		use: ['jquery', 'ads'],
+		run: function($, Ads){
+			$(document).on('click', function(){
+				Ads.refresh();
+			});
+		}
+	});
+&lt;/script&gt;</pre>
 						</div><!-- /.method -->
 					</section>
 
@@ -418,18 +418,19 @@
 
 						<p>Example of simple usage:</p>
 
-	<pre>&lt;div class="ad_desktop" data-sizes="[[728, 90]]" data-position="728a"&gt;&lt;/div&gt;
+<pre>&lt;div class="ad_desktop" data-sizes="[[728, 90]]" data-position="728a"&gt;&lt;/div&gt;
+&lt;div class="ad_mobile" data-sizes="[[320, 32]]" data-position="728a"&gt;&lt;/div&gt;
 
-	&lt;script type="text/javascript"&gt;
-		CLARITY.push({
-			use: ['ads'], // I want to use the GPT Ad Module
-			run: function(Ads){ // Call the GPT Ad Module "Ads" for this function
-				Ads.site_code = 'buz.celebuzz';
-				Ads.zone = 'homepage';
-				Ads.autoPopulate();
-			}
-		});
-	&lt;/script&gt;</pre>
+&lt;script type="text/javascript"&gt;
+	CLARITY.push({
+		use: ['ads'], // I want to use the GPT Ad Module
+		run: function(Ads){ // Call the GPT Ad Module "Ads" for this function
+			Ads.site_code = 'buz.celebuzz';
+			Ads.zone = 'homepage';
+			Ads.autoPopulate();
+		}
+	});
+&lt;/script&gt;</pre>
 
 					</section><!-- /#gpt_usage -->
 
