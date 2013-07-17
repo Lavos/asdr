@@ -15,6 +15,16 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 		});
 	};
 
+	function getAsiSegments () {
+		var segments = [], seg_string = __.cookies.get('rsi_segs');
+
+		if (seg_string && seg_string.length) {
+			segments = seg_string.split('|');
+		};
+
+		return segments.slice(0, Math.min(segments.length, 20));
+	};
+
 	// Ad Constructor
 	var Ad = function Ad (params) {
 		var self = this;
@@ -103,8 +113,17 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 
 		insertGPT(function(){
 			self._ingestKeywords(self.keywords);
+
+			// adding Audience Science cookie values
+			var asi_segments = getAsiSegments();
+
+			if (asi_segments.length) {
+				self.addPageTargeting('asi', asi_segments);
+			};
+
 			self.stash.purge();
 		});
+
 	};
 
 	__.augment(AdManager, __.PubSubPattern);
@@ -201,7 +220,6 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 				googletag.pubads().setTargeting(keyword_key, keyword_values);
 			});
 		};
-
 	};
 
 	AdManager.prototype._isValidPath = function _isValidPath (paths, location_override) {
