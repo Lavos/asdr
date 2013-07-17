@@ -1,6 +1,7 @@
 CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($, _, __){
 	var WINDOW_WIDTH = __.dims().x;
 	var IS_MOBILE = WINDOW_WIDTH < 728;
+	var NETWORK_CODE = 4700;
 
 	function insertGPT (callback) {
 		var src = ('https:' === document.location.protocol ? 'https:' : 'http:') + '//www.googletagservices.com/tag/js/gpt.js';
@@ -46,11 +47,11 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 
 	__.augment(Ad, __.PubSubPattern);
 
-	Ad.prototype.display = function display (network_code, site_code, keywords_map) {
+	Ad.prototype.display = function display (site_code, keywords_map) {
 		var self = this;
 
 		googletag.cmd.push(function(){
-			var code_path = __.sprintf('/%s/%s/%s', network_code, site_code, self.options.zone);
+			var code_path = __.sprintf('/%s/%s/%s', NETWORK_CODE, site_code, self.options.zone);
 
 			if (self.options['out-of-page']) {
 				var adSlot = googletag.defineOutOfPageSlot(code_path, self.id);
@@ -93,7 +94,6 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 
 		self.site_code = ''; // site ID
 		self.zone = ''; // page type
-		self.network_code = 4700;
 		self.keywords = [];
 		self.keyword_map = {}; // collection of extensions keywords
 
@@ -274,15 +274,18 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 	AdManager.prototype.createAd = function createAd (params) {
 		var self = this;
 
-		self.stash.push(function(){
-			var settings = _.defaults(params, { zone: self.zone });
-			var new_ad = new Ad(settings);
+		var settings = _.defaults(params, { zone: self.zone });
+		var new_ad = new Ad(settings);
 
-			self.ad_list.push(new_ad);
-			self.ads_by_id[new_ad.id] = new_ad;
-			self.fire('create_ad', new_ad);
-			new_ad.display(self.network_code, self.site_code, self.keyword_map[settings.position] || {});
+		self.ad_list.push(new_ad);
+		self.ads_by_id[new_ad.id] = new_ad;
+		self.fire('create_ad', new_ad);
+
+		self.stash.push(function(){
+			new_ad.display(self.site_code, self.keyword_map[settings.position] || {});
 		});
+
+		return new_ad;
 	};
 
 	AdManager.prototype.refresh = function refresh (id) {
