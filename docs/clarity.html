@@ -16,7 +16,7 @@
 			dl dt { margin: 1.75em 0 .5em 0; }
 			dl dd { margin: 0 0 .5em 1em; }
 
-		dt small { color: #aaa; margin: 0 0 0 1em; font-weight: normal; }
+			dt small { color: #aaa; margin: 0 0 0 1em; font-weight: normal; }
 
 		.method { margin: 0 0 40px 0; }
 			.method h4 { color: #4444aa; }
@@ -73,8 +73,12 @@
 <pre>&lt;script type="text/javascript"&gt;
 	(function(){
 		window['CLARITY'] = [];
-		var ns = document.createElement('script'), s = document.getElementsByTagName('script')[0];
-		ns.async = true; ns.type = 'text/javascript'; ns.src = '//lib.spinmedia.com/clarity.min.js'; s.parentNode.insertBefore(ns, s);
+		var ns = document.createElement('script'),
+		s = document.getElementsByTagName('script')[0];
+		ns.async = true;
+		ns.type = 'text/javascript';
+		ns.src = '//lib.spinmedia.com/clarity.min.js';
+		s.parentNode.insertBefore(ns, s);
 	})();
 &lt;/script&gt;</pre>
 
@@ -166,8 +170,11 @@
 							<dd>An array of all the Ad objects created by the GPT Ads Module.</dd>
 
 							<dt>.ads_by_id <small>object</small></dt>
-							<dd>A hash of all the Ad objects created by the GPT Ads Module keyed by their id property. Used internally by <code>.refresh()</code>.
+							<dd>A hash of all the Ad objects created by the GPT Ads Module keyed by their id property. Used internally by <code>.refresh()</code>.</dd>
 
+							<dt>.keywords <small>array of objects</small></dt>
+							<dd>An Extensions-created list of keywords. Most likely set by passing the Extensions exposed list.</dd>
+							<dd>Example: <code>Ads.keywords = window.extensionsKeywords || [];</code></dd>
 						</dl>
 
 					</section>
@@ -427,6 +434,7 @@
 		run: function(Ads){ // Call the GPT Ad Module "Ads" for this function
 			Ads.site_code = 'buz.celebuzz';
 			Ads.zone = 'homepage';
+			Ads.keywords = window.extensionsKeywords || [];
 			Ads.autoPopulate();
 		}
 	});
