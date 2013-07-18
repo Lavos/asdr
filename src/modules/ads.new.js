@@ -131,6 +131,10 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 	AdManager.prototype._ingestKeywords = function _ingestKeywords (keyword_list) {
 		var self = this;
 
+		if (__.getClass(keyword_list) !== 'array') {
+			return;
+		};
+
 		// first, loop over all the keyword objects
 		var counter = keyword_list.length;
 		while (counter--) {
