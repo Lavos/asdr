@@ -175,6 +175,9 @@
 							<dt>.keywords <small>array of objects</small></dt>
 							<dd>An Extensions-created list of keywords. Most likely set by passing the Extensions exposed list.</dd>
 							<dd>Example: <code>Ads.keywords = window.extensionsKeywords || [];</code></dd>
+
+							<dt>.keyword_map <small>object</small></dt>
+							<dd>A hash from parsing the Extensions Keywords, keyed by <code>pos</code>, and passed to Ad objects with matching <code>pos</code>.</dd>
 						</dl>
 
 					</section>
@@ -309,7 +312,7 @@
 							<h5>Arguments</h5>
 							<dl>
 								<dt>selector <small>string</small></dt>
-								<dd>a string containing a css selector. This string is passed to jQuery interally, so any Sizzle engine syntax is valid.</dd>
+								<dd>a string containing a css selector. This string is passed to jQuery internally, so any Sizzle engine syntax is valid.</dd>
 							</dl>
 
 							<h5>Example</h5>
@@ -388,7 +391,7 @@
 
 						<div class="method">
 							<h4>.refresh([id]);</h4>
-							<p>Refreshes either all add slots on the page, or the ad slot with the id specified.</p>
+							<p>Refreshes either all ad slots on the page, or the ad slot with the id specified.</p>
 
 							<h5>Arguments</h5>
 							<dl>
@@ -432,11 +435,12 @@
 
 <pre>Ads.keywords = window.extensionsKeywords || [];</pre>
 
-						<p>You should do this when you set the site_code and zone within the Clarity work object:
+						<p>You should do this when you set the site_code and zone within the Clarity work object</p>
 
 						<p>That's one of the reasons why we need Topscript before Ads get processed. It needs the keywords before making ad calls, since the calls themselves need the values. It's not optimal, but it what had to work with.</p>
 
-						<p>Example of simple usage:</p>
+						<h4>Example of simple usage</h4>
+						<p>This example populates a single ad, using <code>.AutoPopulate()</code>.</p>
 
 <pre>&lt;div class="ad_desktop" data-sizes="[[728, 90]]" data-position="728a"&gt;&lt;/div&gt;
 &lt;div class="ad_mobile" data-sizes="[[320, 32]]" data-position="728a"&gt;&lt;/div&gt;
