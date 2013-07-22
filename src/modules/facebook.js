@@ -23,11 +23,11 @@ CLARITY.provide('facebook', ['doubleunderscore', 'module_helper'], function(__, 
 
 	Facebook.prototype.global_name = 'twitter';
 
-	Facebook.prototype.init = function init (appID, permissions) {
+	Facebook.prototype.init = function init (params) {
 		var self = this;
 
-		self.appID = appID;
-		self.permissions = permissions;
+		self.appID = params.appID || '';
+		self.permissions = params.permissions || 'email';
 
 		self.load_stash.push(function(){
 			self.jsapi.init({
@@ -113,6 +113,15 @@ CLARITY.provide('facebook', ['doubleunderscore', 'module_helper'], function(__, 
 
 
 	// convenience functions
+
+	Facebook.prototype.initialize = function initialize (appID, permissions) {
+		var self = this;
+
+		self.init({
+			appID: appID,
+			permissions: permissions
+		});
+	};
 
 	Facebook.prototype.logout = function logout (callback) {
 		var self = this;
