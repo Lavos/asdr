@@ -1,4 +1,4 @@
-CLARITY.provide('googleplus', ['doubleunderscore'], function(__){
+CLARITY.provide('googleplus', ['doubleunderscore', 'module_helper'], function(__, module_helper){
 	var GooglePlusManager = function GooglePlusManager () {
 		var self = this;
 
@@ -17,15 +17,7 @@ CLARITY.provide('googleplus', ['doubleunderscore'], function(__){
 	__.augment(GooglePlusManager, __.PubSubPattern);
 	
 	GooglePlusManager.prototype.global_name = 'googleplus';
-
-	GooglePlusManager.prototype.push = function push (work_obj) {
-		var self = this;
-
-		var func = work_obj.run || function(){};
-		var uses = work_obj.use || [];
-
-		self.stash.push(func, uses, self);
-	};
-
+	GooglePlusManager.prototype.push = module_helper.workobj_push;
+ 
 	return new GooglePlusManager();
 });

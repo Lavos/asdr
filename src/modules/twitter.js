@@ -1,4 +1,4 @@
-CLARITY.provide('twitter', ['doubleunderscore'], function(__){
+CLARITY.provide('twitter', ['doubleunderscore', 'module_helper'], function(__, module_helper){
 	var TwitterManager = function TwitterManager () {
 		var self = this;
 
@@ -19,15 +19,7 @@ CLARITY.provide('twitter', ['doubleunderscore'], function(__){
 	__.augment(TwitterManager, __.PubSubPattern);
 	
 	TwitterManager.prototype.global_name = 'twitter';
-
-	TwitterManager.prototype.push = function push (work_obj) {
-		var self = this;
-
-		var func = work_obj.run || function(){};
-		var uses = work_obj.use || [];
-
-		self.stash.push(func, uses, self);
-	};
+	TwitterManager.prototype.push = module_helper.workobj_push;
 
 	return new TwitterManager();
 });
