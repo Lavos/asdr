@@ -1,4 +1,4 @@
-CLARITY.provide('facebook', ['doubleunderscore', 'module_helper'], function(__, module_helper){
+CLARITY.provide('facebook', ['doubleunderscore'], function(__){
 	var Facebook = function Facebook () {
 		var self = this;
 
@@ -10,18 +10,28 @@ CLARITY.provide('facebook', ['doubleunderscore', 'module_helper'], function(__, 
 		self.init_stash = new __.Stash();
 		self.load_stash = new __.Stash();
 
-		self.element = __.addJS('//connect.facebook.net/en_US/all.js', function(){
-			self.jsapi = window.FB;
-			self.fire('ready');
-			self.load_stash.purge();
-		});
+		if (document.getElementById('facebook-jssdk')) {
+			self._handleReady();
+		} else {
+			var script = __.addJS('//connect.facebook.net/en_US/all.js', function(){
+				self._handleReady();
+			});
 
-		self.element.id = 'facebook-jssdk';
+			script.id = 'facebook-jssdk';
+		};
 	};
 
 	__.augment(Facebook, __.PubSubPattern);
 
-	Facebook.prototype.global_name = 'twitter';
+	Facebook.prototype.global_name = 'facebook';
+
+	Facebook.prototype._handleReady = function _handleReady () {
+		var self = this;
+
+		self.jsapi = window.FB;
+		self.fire('ready');
+		self.load_stash.purge();
+	};
 
 	Facebook.prototype.init = function init (params) {
 		var self = this;
@@ -160,7 +170,7 @@ CLARITY.provide('facebook', ['doubleunderscore', 'module_helper'], function(__, 
 				callback(this.user);
 			}
 		});
-	},
+	};
 
 	Facebook.prototype.get = function get (path, callback) {
 		var self = this;
