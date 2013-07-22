@@ -9,15 +9,14 @@ CLARITY.provide('facebook', ['doubleunderscore', 'module_helper'], function(__, 
 
 		self.init_stash = new __.Stash();
 		self.load_stash = new __.Stash();
-		/* self.element = document.createElement('div');
-		self.element.id = 'fb-root';
-		document.getElementsByTagname('body')[0].appendChild(self.element); */
 
-		__.addJS('//connect.facebook.net/en_US/all.js', function(){
+		self.element = __.addJS('//connect.facebook.net/en_US/all.js', function(){
 			self.jsapi = window.FB;
 			self.fire('ready');
 			self.load_stash.purge();
 		});
+
+		self.element.id = 'facebook-jssdk';
 	};
 
 	__.augment(Facebook, __.PubSubPattern);
@@ -44,11 +43,8 @@ CLARITY.provide('facebook', ['doubleunderscore', 'module_helper'], function(__, 
 				self.user.loginStatus = response.status;
 
 				if (self.user.loginStatus === 'connected') {
-					// the user is logged in and connected to your
-					// app, and response.authResponse supplies
-					// the user's ID, a valid access token, a signed
-					// request, and the time the access token
-					// and signed request each expire
+					// the user is logged in and connected to your app and response.authResponse supplies:
+					// the user's ID, a valid access token, a signed request, and the time the access token and signed request expire
 					self.user.uid = response.authResponse.userID;
 					self.user.accessToken = response.authResponse.accessToken;
 
@@ -84,11 +80,6 @@ CLARITY.provide('facebook', ['doubleunderscore', 'module_helper'], function(__, 
 			};
 
 			if (needPermission) {
-				//
-				// 1. ask for permission
-				// 2. reset user.permissions
-				// 3. execute callback function
-				//
 				self.jsapi.login(function(response){
 					self.get('/me/permissions', function(data){
 						if (typeof data.data == 'object') {
@@ -100,9 +91,13 @@ CLARITY.provide('facebook', ['doubleunderscore', 'module_helper'], function(__, 
 					});
 				}, { scope: permission });
 			} else {
-				self.jsapi.login(function(response){
-					callback(response);
-				});
+				if (self.user.loginStatus !== 'connected') {
+					self.jsapi.login(function(response){
+						callback(response);
+					});
+				} else {
+					callback(null);
+				};
 			};
 		});
 	};
@@ -124,7 +119,7 @@ CLARITY.provide('facebook', ['doubleunderscore', 'module_helper'], function(__, 
 
 		self.push({
 			use: [callback],
-			run: function(callback) {
+			run: function(callback){
 				this.jsapi.logout(callback);
 			}
 		});
