@@ -17,7 +17,6 @@ CLARITY.provide('facebook', ['doubleunderscore', 'module_helper'], function(__, 
 			self.jsapi = window.FB;
 			self.fire('ready');
 			self.load_stash.purge();
-			console.log('loaded');
 		});
 	};
 
@@ -41,8 +40,6 @@ CLARITY.provide('facebook', ['doubleunderscore', 'module_helper'], function(__, 
 			});
 
 			self.jsapi.getLoginStatus(function(response){
-				console.log(response);
-
 				self.initialized = true;
 				self.user.loginStatus = response.status;
 
@@ -57,8 +54,6 @@ CLARITY.provide('facebook', ['doubleunderscore', 'module_helper'], function(__, 
 
 					// Get the user's permission
 					self.jsapi.api('/me/permissions', function(data){
-						console.log(data);
-
 						self.user.permissions = data.data[0];
 						self.init_stash.purge();
 					});
