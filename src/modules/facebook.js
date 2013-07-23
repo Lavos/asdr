@@ -55,7 +55,7 @@ CLARITY.provide('facebook', ['doubleunderscore'], function(__){
 				if (self.user.loginStatus === 'connected') {
 					// the user is logged in and connected to your app and response.authResponse supplies:
 					// the user's ID, a valid access token, a signed request, and the time the access token and signed request expire
-					self.user.uid = response.authResponse.userID;
+					self.user.uid = self.user.userID = response.authResponse.userID;
 					self.user.accessToken = response.authResponse.accessToken;
 
 					// Get the user's permission
@@ -91,7 +91,7 @@ CLARITY.provide('facebook', ['doubleunderscore'], function(__){
 
 			if (needPermission) {
 				self.jsapi.login(function(response){
-					self.get('/me/permissions', function(data){
+					self.jsapi.api('/me/permissions', function(data){
 						if (typeof data.data == 'object') {
 							self.user.permissions = data.data[0];
 							callback(response);
@@ -106,7 +106,7 @@ CLARITY.provide('facebook', ['doubleunderscore'], function(__){
 						callback(response);
 					});
 				} else {
-					callback(null);
+					callback({ authResponse: self.user });
 				};
 			};
 		});
