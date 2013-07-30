@@ -38,9 +38,11 @@
 	};
 
 	CLARITY.prototype.provide = function provide (point, depends, singleton) {
-		prehash[point] = {
-			singleton: singleton,
-			depends: depends
+		if (!prehash.hasOwnProperty(point)) {
+			prehash[point] = {
+				singleton: singleton,
+				depends: depends
+			};
 		};
 	};
 
