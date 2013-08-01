@@ -42,6 +42,7 @@
 						<li><a href="#gpt_properties">Properties</a></li>
 						<li><a href="#gpt_methods">Methods</a></li>
 						<li><a href="#gpt_usage">Usage</a></li>
+						<li><a href="#example_setup">Example Setup</a></li>
 					</ul>
 				</div><!-- /#movenav -->
 			</nav>
@@ -438,17 +439,63 @@
 						<p>You should do this when you set the site_code and zone within the Clarity work object</p>
 
 						<p>That's one of the reasons why we need Topscript before Ads get processed. It needs the keywords before making ad calls, since the calls themselves need the values.</p>
+					</section><!-- /#gpt_usage -->
 
-						<h4>Example of simple usage</h4>
-						<p>This example populates a single ad, using <code>.AutoPopulate()</code>.</p>
+					<section id="example_setup">
+
+						<h3>Example setup</h3>
+						<p>This example can be applied to any site, so long as the list below each step is followed.</p>
+
+						<h4>Step One</h4>
+						<p>Add the following block of code to the header:</p>
+
+<pre>&lt;script type="text/javascript"&gt;
+	(function(){
+		window['CLARITY'] = [];
+		var ns = document.createElement('script'),
+		s = document.getElementsByTagName('script')[0];
+		ns.async = true;
+		ns.type = 'text/javascript';
+		ns.src = '//lib.spinmedia.com/clarity.min.js';
+		s.parentNode.insertBefore(ns, s);
+	})();
+&lt;/script&gt;</pre>
+						
+						<h4>Step Two</h4>
+						<p>The following lines of code should replace the existing ad tags:</p>
 
 <pre>&lt;div class="ad_desktop" data-sizes="[[728, 90]]" data-position="728a"&gt;&lt;/div&gt;
-&lt;div class="ad_mobile" data-sizes="[[320, 32]]" data-position="728a"&gt;&lt;/div&gt;
+&lt;div class="ad_mobile" data-sizes="[[320, 50],[320, 250],[300, 250]]" data-position="a"&gt;&lt;/div&gt;</pre>
 
-&lt;script type="text/javascript"&gt;
+						<ul>
+							<li>Use the <code>div</code> with the class <code>ad_desktop</code> for desktop ads and the class <code>ad_mobile</code> for mobile ads.</li>
+							<li>Change the values in <code>data-sizes</code> to reflect each ad tag.  There can be more than one size per ad tag.
+								<ul>
+									<li>Desktop: <code>[728, 90]</code> <code>[300, 250],[300, 600]</code> <code>[300, 250]</code> <code>[160, 600]</code></li>
+									<li>Mobile: <code>[320, 50],[320, 250],[300, 250]</code>
+								</ul>
+							</li>
+							<li>Change the value of <code>data-position</code> to match the slot in which the ad resides.
+								<ul>
+									<li>Make sure that there is only <strong>one</strong> ad of each <code>data-position</code> on every page.</li>
+									<li>Desktop: <code>728a</code> <code>728b</code> <code>300a</code> <code>300b</code> <code>300c</code> <code>160a</code> <code>160b</code>
+										<ul>
+											<li>The following <code>div</code> replaces <code>data-sizes</code> and <code>data-position</code> with <code>data-out-of-page</code> for takeover ads.</li>
+											<pre>&lt;div class="ad_desktop" data-out-of-page="true"&gt;&lt;/div&gt;</pre>
+										</ul>
+									</li>
+									<li>Mobile: <code>a</code> <code>b</code></li>
+								</ul></li>
+								<li>Add any other <code>class</code> or <code>id</code> to match the old ad tags.</li>
+						</ul>
+
+						<h4>Step Three</h4>
+						<p>Add the following block of code to the footer:</p>
+
+<pre>&lt;script type="text/javascript"&gt;
 	CLARITY.push({
-		use: ['ads'], // I want to use the GPT Ad Module
-		run: function(Ads){ // Call the GPT Ad Module "Ads" for this function
+		use: ['ads'],
+		run: function(Ads){
 			Ads.site_code = 'buz.celebuzz';
 			Ads.zone = 'homepage';
 			Ads.keywords = window.extensionsKeywords || [];
@@ -456,8 +503,23 @@
 		}
 	});
 &lt;/script&gt;</pre>
-					</section><!-- /#gpt_usage -->
 
+						<ul>
+							<li>Make sure that the <code>site_code</code>matches the site code of your site.</li>
+							<li>Change the <code>zone</code> to match each individual page on your site.</li>
+						</ul>
+
+						<h4><small>optional</small> Step Four</h4>
+						<p>Add the following block of code <strong>only</strong> if your site uses AJAX to refresh its galleies:</p>
+
+<pre>CLARITY.push({
+	use: ['ads'],
+	run: function(Ads) {
+		Ads.refresh();
+	}
+});</pre>
+
+					</section><!-- /#example_setup -->
 				</article>
 			</div><!-- /.span10 -->
 		</div><!-- /.row -->
