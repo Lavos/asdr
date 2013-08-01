@@ -313,23 +313,25 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 	AdManager.prototype.refresh = function refresh (id) {
 		var self = this;
 
-		if (typeof id === 'undefined') {
-			var slots = [], affected_ads = [];
-			var counter = 0, limit = self.ad_list.length;
-			while (counter < limit) {
-				var current = self.ad_list[counter];
-				slots.push(current.gpt_slot);
-				affected_ads.push(current);
-				counter++;
-			};
+		self.stash.push(function(){
+			if (typeof id === 'undefined') {
+				var slots = [], affected_ads = [];
+				var counter = 0, limit = self.ad_list.length;
+				while (counter < limit) {
+					var current = self.ad_list[counter];
+					slots.push(current.gpt_slot);
+					affected_ads.push(current);
+					counter++;
+				};
 
-			googletag.pubads().refresh(slots);
-			_.invoke(affected_ads, 'fire', 'refresh');
-			self.fire('refresh', affected_ads);
-		} else if (self.ads_by_id.hasOwnProperty(id)) {
-			self.ads_by_id[id].refresh();
-			self.fire('refresh', [self.ads_by_id[id]]);
-		};
+				googletag.pubads().refresh(slots);
+				_.invoke(affected_ads, 'fire', 'refresh');
+				self.fire('refresh', affected_ads);
+			} else if (self.ads_by_id.hasOwnProperty(id)) {
+				self.ads_by_id[id].refresh();
+				self.fire('refresh', [self.ads_by_id[id]]);
+			};
+		});
 	};
 
 	return new AdManager();
