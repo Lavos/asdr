@@ -1239,7 +1239,7 @@ return (function(){
 
 		var eventname = handle[0], func = handle[1];
 
-		if (self.subscriptions.hasOwnProperty(eventname)) {
+		if (__.hasPath(self, 'subscriptions.' + eventname)) {
 			var callbacks = self.subscriptions[eventname];
 
 			var counter = callbacks.length;
