@@ -478,16 +478,16 @@
 							<li>Change the value of <code>data-position</code> to match the slot in which the ad resides.
 								<ul>
 									<li>Make sure that there is only <strong>one</strong> ad of each <code>data-position</code> on every page.</li>
-									<li>Desktop: <code>728a</code> <code>728b</code> <code>300a</code> <code>300b</code> <code>300c</code> <code>160a</code> <code>160b</code>
-										<ul>
-											<li>The following <code>div</code> replaces <code>data-sizes</code> and <code>data-position</code> with <code>data-out-of-page</code> for takeover ads.</li>
-											<pre>&lt;div class="ad_desktop" data-out-of-page="true"&gt;&lt;/div&gt;</pre>
-										</ul>
-									</li>
+									<li>Desktop: <code>728a</code> <code>728b</code> <code>300a</code> <code>300b</code> <code>300c</code> <code>160a</code> <code>160b</code></li>
 									<li>Mobile: <code>a</code> <code>b</code></li>
 								</ul></li>
 								<li>Add any other <code>class</code> or <code>id</code> to match the old ad tags.</li>
 						</ul>
+
+						<p>The following <code>div</code> replaces <code>data-sizes</code> and <code>data-position</code> with <code>data-out-of-page</code> for takeover ads.</p>
+
+<pre>&lt;div class="ad_desktop" data-out-of-page="true"&gt;&lt;/div&gt;
+&lt;div class="ad_mobile" data-out-of-page="true"&gt;&lt;/div&gt;</pre>
 
 						<h4>Step Three</h4>
 						<p>Add the following block of code to the footer:</p>
