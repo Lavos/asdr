@@ -2,6 +2,32 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 	var WINDOW_WIDTH = __.dims().x;
 	var IS_MOBILE = WINDOW_WIDTH < 728;
 	var NETWORK_CODE = 4700;
+	var BLOCK_ADS = false;
+
+	var blocked_ips = [
+		'173.244.180.106',
+		'173.244.180.114',
+		'173.244.180.122',
+		'173.244.180.138',
+		'173.244.180.146',
+		'173.244.180.162',
+		'173.244.180.34',
+		'173.244.180.42',
+		'173.244.180.58',
+		'173.244.180.66',
+		'173.244.180.82',
+		'173.244.186.18',
+		'173.244.186.34',
+		'173.45.123.226',
+		'173.45.64.34',
+		'209.190.12.130',
+		'64.79.68.178'
+	];
+
+	if (typeof window.remote_ip_address !== 'undefined') {
+		var user_ips = window.remote_ip_address.split(/[\s,]+/);
+		BLOCK_ADS = __.hasIntersection(user_ips, blocked_ips);
+	};
 
 	function insertGPT (callback) {
 		var src = ('https:' === document.location.protocol ? 'https:' : 'http:') + '//www.googletagservices.com/tag/js/gpt.js';
@@ -111,19 +137,20 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 		self.ad_list = [];
 		self.ads_by_id = {};
 
-		insertGPT(function(){
-			self._ingestKeywords(self.keywords);
+		if (!BLOCK_ADS) {
+			insertGPT(function(){
+				self._ingestKeywords(self.keywords);
 
-			// adding Audience Science cookie values
-			var asi_segments = getASISegments();
+				// adding Audience Science cookie values
+				var asi_segments = getASISegments();
 
-			if (asi_segments.length) {
-				self.addPageTargeting('asi', asi_segments);
-			};
+				if (asi_segments.length) {
+					self.addPageTargeting('asi', asi_segments);
+				};
 
-			self.stash.purge();
-		});
-
+				self.stash.purge();
+			});
+		};
 	};
 
 	__.augment(AdManager, __.PubSubPattern);
