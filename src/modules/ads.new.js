@@ -133,6 +133,7 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 		self.keywords = [];
 		self.keyword_map = {}; // collection of extensions keywords
 
+		self.config_stash = null;
 		self.stash = new __.Stash();
 		self.ad_list = [];
 		self.ads_by_id = {};
@@ -154,6 +155,26 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 	};
 
 	__.augment(AdManager, __.PubSubPattern);
+
+	AdManager.prototype.useLazyConfiguration = function useLazyConfiguration () {
+		var self = this;
+
+		if (!self.config_stash) {
+			self.config_stash = new __.Stash();
+		};
+	};
+
+	AdManager.prototype.configure = function configure (params) {
+		var self = this;
+
+		self.stash.push(function(){
+			self.site_code = params.site_code || '';
+			self.zone = params.zone || '';
+			self.keywords = params.keywords || [];
+			self._ingestKeywords(self.keywords);
+			self.config_stash.purge();
+		});
+	};
 
 	AdManager.prototype._ingestKeywords = function _ingestKeywords (keyword_list) {
 		var self = this;
@@ -207,9 +228,7 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 					var current_keyword = keywords[keywords_counter];
 					if (current_keyword) {
 						// per GPT, single value keywords need to pass a string containing 'true'
-						var obj = {};
-						obj[keywords[keywords_counter]] = 'true';
-						self.keyword_map[current_position].push(obj);
+						self.keyword_map[current_position][current_keyword] = 'true';
 					};
 				};
 
@@ -315,24 +334,36 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 	AdManager.prototype.addPageTargeting = function addPageTargeting (key, value) {
 		var self = this;
 
-		self.stash.push(function(){
+		function action () {
 			googletag.pubads().setTargeting(key, value);
-		});
+		};
+
+		if (self.config_stash) {
+			self.config_stash.push(action);
+		} else {
+			self.stash.push(action);
+		};
 	};
 
 	AdManager.prototype.createAd = function createAd (params) {
 		var self = this;
 
-		var settings = _.defaults(params, { zone: self.zone });
-		var new_ad = new Ad(settings);
+		var new_ad = new Ad(params);
 
 		self.ad_list.push(new_ad);
 		self.ads_by_id[new_ad.id] = new_ad;
 		self.fire('create_ad', new_ad);
 
-		self.stash.push(function(){
-			new_ad.display(self.site_code, self.keyword_map[settings.position] || {});
-		});
+		function action () {
+			new_ad.options.zone = self.zone;
+			new_ad.display(self.site_code, self.keyword_map[params.position] || {});
+		};
+
+		if (self.config_stash) {
+			self.config_stash.push(action);
+		} else {
+			self.stash.push(action);
+		};
 
 		return new_ad;
 	};
@@ -340,7 +371,7 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 	AdManager.prototype.refresh = function refresh (id) {
 		var self = this;
 
-		self.stash.push(function(){
+		function action () {
 			if (typeof id === 'undefined') {
 				var slots = [], affected_ads = [];
 				var counter = 0, limit = self.ad_list.length;
@@ -358,7 +389,13 @@ CLARITY.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($,
 				self.ads_by_id[id].refresh();
 				self.fire('refresh', [self.ads_by_id[id]]);
 			};
-		});
+		};
+
+		if (self.config_stash) {
+			self.config_stash.push(action);
+		} else {
+			self.stash.push(action);
+		};
 	};
 
 	return new AdManager();
