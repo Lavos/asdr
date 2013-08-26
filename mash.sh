@@ -1,9 +1,24 @@
 #!/bin/bash
 
+USAGE="USAGE: mash.sh min|src"
+COMPRESSION=$1
+
+case $COMPRESSION in
+	min)
+		BASE='./bin/'
+		EXT='.min.js'
+	;;
+	src)
+		BASE='./src/'
+		EXT='.js'
+	;;
+	*)
+		echo "You must specify a compression."
+		echo $USAGE
+		return
+	;;
+esac
+
 echo "// $(date)"
 echo "// $(git rev-parse HEAD)"
-
-case $1 in
-	prod) cat ./bin/first.min.js ./bin/modules/*.js ./bin/last.min.js;;
-	dev) cat ./src/first.js ./src/modules/*.js ./src/last.js;;
-esac
+cat ${BASE}library/first${EXT} ${BASE}modules/*${EXT} ${BASE}library/last${EXT}
