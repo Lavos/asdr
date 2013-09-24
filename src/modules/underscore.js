@@ -1,4 +1,4 @@
-CLARITY.provide('underscore', [], function(){
+provide('underscore', [], function(){
 	// Underscore.js 1.4.4
 	// ===================
 

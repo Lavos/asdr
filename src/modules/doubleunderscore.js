@@ -1,4 +1,4 @@
-CLARITY.provide('doubleunderscore', [], function(){
+provide('doubleunderscore', [], function(){
 return (function(){
 
 // {{{ Credits, Info

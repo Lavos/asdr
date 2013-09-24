@@ -1,4 +1,4 @@
-CLARITY.provide('twitter', ['doubleunderscore', 'module_helper'], function(__, module_helper){
+provide('twitter', ['doubleunderscore', 'module_helper'], function(__, module_helper){
 	var TwitterManager = function TwitterManager () {
 		var self = this;
 

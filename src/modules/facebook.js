@@ -1,4 +1,4 @@
-CLARITY.provide('facebook', ['doubleunderscore'], function(__){
+provide('facebook', ['doubleunderscore'], function(__){
 	var Facebook = function Facebook () {
 		var self = this;
 

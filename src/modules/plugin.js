@@ -1,4 +1,5 @@
-CLARITY.provide('plugin', ['jquery', 'doubleunderscore'], function($, __){
+provide('plugin', ['jquery', 'doubleunderscore'], function($, __){
+	var LIBRARY = this;
 	var Plugin = function Plugin () {};
 
 	__.augment(Plugin, __.PubSubPattern);
@@ -12,7 +13,7 @@ CLARITY.provide('plugin', ['jquery', 'doubleunderscore'], function($, __){
 
 		var sm = new __.SerialManager(urls.length, function(){
 			self.fire('load_module', urls);
-			CLARITY.push(work_obj);
+			LIBRARY.push(work_obj);
 		});
 
 		var counter = urls.length;
@@ -30,7 +31,7 @@ CLARITY.provide('plugin', ['jquery', 'doubleunderscore'], function($, __){
 
 		var sm = new __.SerialManager(urls.length, function(){
 			self.fire('load_jquery_plugin', urls);
-			CLARITY.push(work_obj);
+			LIBRARY.push(work_obj);
 		});
 
 		var counter = urls.length;

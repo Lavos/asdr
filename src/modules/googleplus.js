@@ -1,4 +1,4 @@
-CLARITY.provide('googleplus', ['doubleunderscore', 'module_helper'], function(__, module_helper){
+provide('googleplus', ['doubleunderscore', 'module_helper'], function(__, module_helper){
 	var GooglePlusManager = function GooglePlusManager () {
 		var self = this;
 

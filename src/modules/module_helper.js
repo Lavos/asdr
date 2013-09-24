@@ -1,4 +1,4 @@
-CLARITY.provide('module_helper', [], function(){
+provide('module_helper', [], function(){
 	return {
 		workobj_push: function push (work_obj) {
 			var self = this;
