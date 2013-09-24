@@ -1,10 +1,10 @@
-(function(CLARITY){
-	CLARITY.end_time = new Date();
-	CLARITY.eval_time = CLARITY.end_time - CLARITY.start_time;
+(function(LIBRARY){
+	LIBRARY.end_time = new Date();
+	LIBRARY.eval_time = LIBRARY.end_time - LIBRARY.start_time;
 
-	var counter = 0, limit = CLARITY.list.length;
+	var counter = 0, limit = LIBRARY.list.length;
 	while (counter < limit) {
-		CLARITY.push(CLARITY.list[counter]);
+		LIBRARY.push(LIBRARY.list[counter]);
 		counter++;
 	};
-})(window['CLARITY']);
+})(window['%%LIBRARY_NAME%%']);

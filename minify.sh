@@ -1,9 +1,10 @@
 #!/bin/bash
 
-ACTION=$1
+NAME=$1
 SRC_BASE="./src/"
 BIN_BASE="./bin/"
 DIRS="library/ modules/"
+SED_COMMANDS="s|%%LIBRARY_NAME%%|$1|g"
 
 for dir in $DIRS
 do
@@ -24,6 +25,6 @@ do
 			-d output_format=text \
 			http://closure-compiler.appspot.com/compile)
 
-		echo "$blob" > $BIN_BASE$dir$filename.min.$extension
+		echo "$blob" | sed "$SED_COMMANDS" > $BIN_BASE$dir$filename.min.$extension
 	done
 done
