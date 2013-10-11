@@ -1,4 +1,4 @@
-provide('underscore', [], function(){
+__LIBRARY_NAME__.provide('underscore', [], function(){
 	// Underscore.js 1.4.4
 	// ===================
 

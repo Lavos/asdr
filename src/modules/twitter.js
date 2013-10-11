@@ -1,4 +1,4 @@
-provide('twitter', ['doubleunderscore', 'module_helper'], function(__, module_helper){
+__LIBRARY_NAME__.provide('twitter', ['doubleunderscore', 'module_helper'], function(__, module_helper){
 	var TwitterManager = function TwitterManager () {
 		var self = this;
 

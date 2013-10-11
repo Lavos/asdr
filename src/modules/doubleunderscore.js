@@ -1,4 +1,4 @@
-provide('doubleunderscore', [], function(){
+__LIBRARY_NAME__.provide('doubleunderscore', [], function(){
 return (function(){
 
 // {{{ Credits, Info

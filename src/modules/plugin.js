@@ -1,4 +1,4 @@
-provide('plugin', ['jquery', 'doubleunderscore'], function($, __){
+__LIBRARY_NAME__.provide('plugin', ['jquery', 'doubleunderscore'], function($, __){
 	var LIBRARY = this;
 	var Plugin = function Plugin () {};
 

@@ -1,4 +1,4 @@
-provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($, _, __){
+__LIBRARY_NAME__.provide('ads', ['jquery', 'underscore', 'doubleunderscore'], function($, _, __){
 	var WINDOW_WIDTH = __.dims().x;
 	var IS_MOBILE = WINDOW_WIDTH < 728;
 	var NETWORK_CODE = 4700;

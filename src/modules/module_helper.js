@@ -1,4 +1,4 @@
-provide('module_helper', [], function(){
+__LIBRARY_NAME__.provide('module_helper', [], function(){
 	return {
 		workobj_push: function push (work_obj) {
 			var self = this;

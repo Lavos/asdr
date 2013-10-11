@@ -1,4 +1,4 @@
-provide('facebook', ['doubleunderscore'], function(__){
+__LIBRARY_NAME__.provide('facebook', ['doubleunderscore'], function(__){
 	var Facebook = function Facebook () {
 		var self = this;
 

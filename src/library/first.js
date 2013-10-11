@@ -5,9 +5,6 @@
 		var list = root[namespace];
 		var LIBRARY = new CONSTRUCTOR();
 		LIBRARY.list = list;
-		root['provide'] = function(){
-			LIBRARY.provide.apply(LIBRARY, arguments);
-		};
 		root[namespace] = LIBRARY;
 	};
 })(window, function(){
@@ -19,7 +16,7 @@
 
 	LIBRARY.prototype.store = function store (point) {
 		if (!prehash.hasOwnProperty(point)) {
-			throw('[%%LIBRARY_NAME%%] Unknown reference identifier: ' + point);
+			throw('[__LIBRARY_NAME__] Unknown reference identifier: ' + point);
 		};
 
 		if (posthash.hasOwnProperty(point)) {
@@ -58,4 +55,4 @@
 	};
 
 	return LIBRARY;
-}, '%%LIBRARY_NAME%%');
+}, '__LIBRARY_NAME__');

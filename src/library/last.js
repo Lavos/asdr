@@ -7,4 +7,4 @@
 		LIBRARY.push(LIBRARY.list[counter]);
 		counter++;
 	};
-})(window['%%LIBRARY_NAME%%']);
+})(window['__LIBRARY_NAME__']);

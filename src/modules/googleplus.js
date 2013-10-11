@@ -1,4 +1,4 @@
-provide('googleplus', ['doubleunderscore', 'module_helper'], function(__, module_helper){
+__LIBRARY_NAME__.provide('googleplus', ['doubleunderscore', 'module_helper'], function(__, module_helper){
 	var GooglePlusManager = function GooglePlusManager () {
 		var self = this;
 

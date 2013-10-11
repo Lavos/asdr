@@ -1,4 +1,4 @@
-provide('jquery', [], function(){
+__LIBRARY_NAME__.provide('jquery', [], function(){
 	/*!
 	 * jQuery JavaScript Library v1.9.1
 	 * http://jquery.com/

@@ -1,4 +1,4 @@
-provide('responsive_watcher', ['jquery', 'doubleunderscore'], function($, __){
+__LIBRARY_NAME__.provide('responsive_watcher', ['jquery', 'doubleunderscore'], function($, __){
 	var ResponsiveWatcher = __.inherits(__.PubSubPattern, function ResponsiveWatcher () {
 		var self = this;
 
