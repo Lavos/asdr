@@ -69,13 +69,13 @@ Include something like this in the head of your document.
 		var n = d.createElement(t), s = d.getElementsByTagName(t)[0];
 		n.async = true; n.src = '//the.location.of.your.script.com/script.js';
 		s.parentNode.insertBefore(n, s);
-	})(window, document, 'YOURNAMESPACE', 'script');
+	})(window, document, 'YOURLIBRARY', 'script');
 </script>
 ```
 
 ### Work Objects
 
-The primary way for front-end code to use your ASDR library is through _work objects_. You pass your work object to the `push()` method of your compiled library.
+The primary way for front-end code to use your ASDR library is through _work objects_.
 
 A work object consists of 2 properties:
 ```js
@@ -85,10 +85,10 @@ A work object consists of 2 properties:
 }
 ```
 
-* `use`: an array of dependencies your implementation code requires.
+* `use`: an array of module names your implementation code requires.
 * `run`: a closure your implementation code resides in, gets executed once your ASDR library is ready and all dependencies. Your specified dependencies are exposed as whichever variables you would like inside your closure, in order of inclusion.
 
-Work object typically get passes as arguments to your ASDR library's `push()` method.
+Work object typically get passes as an argument to your ASDR library's `push()` method.
 
 ```js
 YOURLIBRARY.push({
