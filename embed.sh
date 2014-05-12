@@ -20,7 +20,7 @@ case $TYPE in
 
 	*)
 		echo "You must specify both the type and name of the element being embeded." >&2
-		echo "USAGE: ./embed.sh [type] [name] < [element_file] > [processed file]" >&2
+		echo "USAGE: ./embed.sh [type] [namespace] [name] < [element_file] > [processed file]" >&2
 		exit
 	;;
 esac
