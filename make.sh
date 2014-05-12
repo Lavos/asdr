@@ -53,14 +53,14 @@ esac
 for src in "${TEMPLATES[@]}"
 do
 	filename=$(basename "$src")
-	template=$(./embed.sh template "$filename" < "$src")
+	template=$(./embed.sh template $1 "$filename" < "$src")
 	TEMPLATES_BLOB+=("$template")
 done
 
 for src in "${STYLES[@]}"
 do
 	filename=$(basename "$src")
-	style=$(./embed.sh style "$filename" < "$src")
+	style=$(./embed.sh style $1 "$filename" < "$src")
 	STYLES_BLOB+=("$style")
 done
 

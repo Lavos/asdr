@@ -2,7 +2,8 @@
 
 TEMPLATE=$(cat)
 TYPE=$1
-NAME=$2
+NAMESPACE=$2
+NAME=$3
 
 escape_singlequotes="s|'|\\\'|g"
 
@@ -24,4 +25,4 @@ case $TYPE in
 	;;
 esac
 
-echo "CLARITY.provide('$NAME',['embed'],function(a){return a.$FUNCTION_NAME('$CLEAN_TEMPLATE')});"
+echo "$NAMESPACE.provide('$NAME',['embed'],function(a){return a.$FUNCTION_NAME('$CLEAN_TEMPLATE')});"
