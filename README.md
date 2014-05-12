@@ -18,7 +18,7 @@ This framework allows you to create your own hybrid library for your own uses. T
 There's no AJAX'ing for additional resources, so it's super fast. Your entire library (modules, template, and styles) is in a single file that can be cached, CDN'd, minified, gzipped, and then used throughout your network.
 
 ### Namespaced
-ASDR libraries Can co-exist with any other framework or code-base. All modules do not escape outside the ASDR library. The entire library is namespaced inside a single global variable of your choosing. Since you create the modules yourself, you can use multiple versions of the same library can co-exist on the same page as separate modules.
+ASDR libraries can co-exist with any other framework or code-base. All modules should not escape outside the ASDR library. The entire library is namespaced inside a single global variable of your choosing. Since you create the modules yourself, you can use multiple versions of the same library on the same page as separate modules.
 
 Got old code using jQuery 1.2, but you want to use jQuery 2 for everything you are writing now? Create a jQuery 2.0 ASDR module, and now they don't conflict!
 
