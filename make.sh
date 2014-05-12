@@ -5,7 +5,7 @@ USAGE="USAGE: make.sh namespace min|src > [file]"
 NAMESPACE=$1
 COMPRESSION=$2
 
-SED_COMMANDS="s|__LIBRARY_NAME__|$1|g"
+SED_COMMANDS="s|__LIBRARY_NAME__|$NAMESPACE|g"
 
 FIRST='src/library/first.js'
 LAST='src/library/last.js'
