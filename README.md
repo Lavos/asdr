@@ -10,7 +10,7 @@ This framework allows you to create your own hybrid library for your own uses. T
 
 ## It's like Require.js / AMD because...
 
-... your _work objects_ specify which modules you want to use. The script for these modules are pre-bundled into the main library, but are unexecuted until a _work object_ requires a given module.
+... your _work objects_ specify which modules you want to use. The script for these modules are pre-bundled into the main library, but are unexecuted until another module or _work object_ requires a given module.
 
 ## It's great because...
 
@@ -38,7 +38,7 @@ The library is not pre-processed on request, so no request-specific code can exi
 ASDR libraries are "compiled" by the `make.sh` script. This script handles the proper execution order, minifying, and mashing.
 
 ```bash
-./make.sh [namespace] [min|src| > [library file]
+./make.sh [namespace] [min|src] > [library file]
 ```
 
 `namespace` can be any JavaScript friendly variable name.
@@ -52,7 +52,52 @@ ASDR libraries are "compiled" by the `make.sh` script. This script handles the p
 ./make.sh TESTING min > /var/www/scripts/testing.js
 ```
 
-`/var/www/scripts/testing.js` will be the compiled minified version of your ASDR exposed as TESTING (`window.TESTING`) in the JavaScript global scope.
+`/var/www/scripts/testing.js` will be the compiled minified version of your ASDR library exposed as TESTING (`window.TESTING`) in the JavaScript global scope.
+
+
+
+## Front-End Implementation
+
+### Bootstrap
+
+Include something like this in the head of your document.
+
+```html
+<script>
+	(function(w, d, c, t){
+		w[c] = w[c] || [];
+		var n = d.createElement(t), s = d.getElementsByTagName(t)[0];
+		n.async = true; n.src = '//the.location.of.your.script.com/script.js';
+		s.parentNode.insertBefore(n, s);
+	})(window, document, 'YOURNAMESPACE', 'script');
+</script>
+```
+
+### Work Objects
+
+The primary way for front-end code to use your ASDR library is through _work objects_. You pass your work object to the `push()` method of your compiled library.
+
+A work object consists of 2 properties:
+```js
+{
+	use: ['moduleA', 'moduleB'],
+	run: function(moduleA, moduleB){}
+}
+```
+
+* `use`: an array of dependencies your implementation code requires.
+* `run`: a closure your implementation code resides in, gets executed once your ASDR library is ready and all dependencies. Your specified dependencies are exposed as whichever variables you would like inside your closure, in order of inclusion.
+
+Work object typically get passes as arguments to your ASDR library's `push()` method.
+
+```js
+YOURLIBRARY.push({
+	use: ['moduleA', 'moduleB'],
+	run: function(moduleA, moduleB){
+		console.log('do work!');
+	}
+});
+```
 
 ## Development
 
