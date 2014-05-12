@@ -76,4 +76,19 @@ __LIBRARY_NAME__.provide('module_name', ['depA', 'depB'], function(depA, depB){ 
 
 ASDR stores all calls to provide without executing them. Once another module or work object that requires your module is executed, your module code is executed. Your module's code is executed *once*, cached internally by ASDR, and then passed by *reference* in most cases. A good pattern is to return a constructor function with your module, and then initialize a new instance within your implementation code.
 
+#### Example
 
+```js
+__LIBRARY_NAME__.provide('bluemaker', ['jquery', 'underscore'], function($, _){
+	var BlueMaker = function BlueMaker (element) {
+		this.$element = $(element);
+	};
+
+	BlueMaker.prototype.blues = ['blue', 'lightblue', 'cornflowerblue', 'steelblue'];
+
+	BlueMaker.prototype.makeBlue = function makeBlue () {
+		this.$element.css('color', this.blues[_.random(0, this.blues.length-1]));
+	};
+
+	return BlueMaker;
+});
