@@ -1,14 +1,14 @@
 (function(root, factory, namespace){
-	var CONSTRUCTOR = factory();
+	var CONSTRUCTOR = factory(namespace);
 
 	if (root[namespace] instanceof CONSTRUCTOR === false) {
 		var list = root[namespace];
-		var LIBRARY = new CONSTRUCTOR();
-		LIBRARY.list = list;
-		root[namespace] = LIBRARY;
+		root[namespace] = new CONSTRUCTOR();
+		root[namespace].list = list;
 	};
-})(window, function(){
+})(window, function(namespace){
 	var prehash = {}, posthash = {};
+	var class_regex = /\s([a-zA-Z]+)/;
 
 	var LIBRARY = function LIBRARY (){
 		this.start_time = new Date();
@@ -16,7 +16,7 @@
 
 	LIBRARY.prototype.store = function store (point) {
 		if (!prehash.hasOwnProperty(point)) {
-			throw('[__LIBRARY_NAME__] Unknown reference identifier: ' + point);
+			throw('[' + namespace + '] Unknown reference identifier: ' + point);
 		};
 
 		if (posthash.hasOwnProperty(point)) {
@@ -47,9 +47,35 @@
 		};
 	};
 
-	LIBRARY.prototype.push = function push (work_obj) {
-		work_obj['run'] = work_obj['run'] || function(){};
-		work_obj['use'] = work_obj['use'] || [];
+	LIBRARY.prototype.push = function push (variable) {
+		var variable_class = ({}).toString.call(variable).match(class_regex)[1].toLowerCase();
+		var work_obj = {};
+
+		switch (variable_class) {
+
+		default:
+		case 'undefined': // didn't get anything
+			return;
+		break;
+
+		case 'array': // quick
+			var func_name = variable[0], passed_args = variable.slice(1);
+
+			if (!func_name) return;
+
+			work_obj['use'] = ['quick'];
+			work_obj['run'] = function(quick){
+				if (quick.hasOwnProperty(func_name)) {
+					quick[func_name].apply(this, passed_args);
+				};
+			};
+		break;
+
+		case 'object': // assume a work object
+			work_obj['run'] = variable['run'] || function(){};
+			work_obj['use'] = variable['use'] || [];
+		break;
+		};
 
 		work_obj['run'].apply(this, this.process_dependencies(work_obj['use']));
 	};

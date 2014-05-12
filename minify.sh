@@ -1,29 +1,21 @@
 #!/bin/bash
 
-NAME=$1
-SRC_BASE="./src/"
-BIN_BASE="./bin/"
-DIRS="library/ modules/"
+SCRIPT=$(cat)
+red=$(tput setaf 1)
+yellow=$(tput setaf 3)
+cl=$(tput sgr0)
 
-for dir in $DIRS
-do
-	echo "processing directory: $dir"
-	rm $BIN_BASE$dir*.js
+blob=$(echo "$SCRIPT" | curl \
+	--data-urlencode "js_code@-" \
+	-d compilation_level=SIMPLE_OPTIMIZATIONS \
+	-d output_info=compiled_code \
+	-d output_format=text \
+	http://closure-compiler.appspot.com/compile)
 
-	for script in $SRC_BASE$dir*.js
-	do
-		echo "processing script: $script"
-		filename=$(basename "$script")
-		extension="${filename##*.}"
-		filename="${filename%.*}"
-
-		blob=$(curl \
-			--data-urlencode "js_code@$script" \
-			-d compilation_level=SIMPLE_OPTIMIZATIONS \
-			-d output_info=compiled_code \
-			-d output_format=text \
-			http://closure-compiler.appspot.com/compile)
-
-		echo "$blob" > $BIN_BASE$dir$filename.min.$extension
-	done
-done
+if [[ $blob =~ ^Error ]]; then
+	echo "${red}[GCCS] $blob" >&2
+	echo "[MINIFY] Aborting.${cl}" >&2
+	exit
+else
+	echo "$blob"
+fi
